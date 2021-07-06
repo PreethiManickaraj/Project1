@@ -1,0 +1,45 @@
+header {
+	border: 2px inset black;
+	text-align: center;
+	font-size: 40px;
+	font-family: monospace;
+	text-shadow: 2px 5px black;
+	background-image: linear-gradient(to right,red,black);
+	box-shadow: 2px 2px 5px black;
+	margin: 30px;
+	border-radius: 10px;
+	color: white;
+}
+h1 {
+	text-decoration: underline;
+	font-family: verdana;
+	text-align: center;
+}
+form {
+	border: 5px solid black;
+	margin-bottom: 200px;
+	margin-left: 400px;
+	width: 400px;
+	background-color: pink;
+	border-radius: 5px;
+	padding: 10px;
+	box-shadow: 2px 2px 5px white;
+}
+button {
+	background-color: red;
+	border-radius: 10px;
+	text-align: center;
+	box-shadow: 2px 2px 5px black;
+	color: white;
+	margin-left: 150px;
+}
+img {
+	float: right;
+	height: 150px;
+	width: 200px;
+	margin-top: 250px;
+	outline-style: inset;
+}
+body{
+	background-image: radial-gradient(yellow,skyblue,pink);
+}

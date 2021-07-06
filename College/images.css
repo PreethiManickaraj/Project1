@@ -1,0 +1,42 @@
+body{
+	background-image:linear-gradient(to right,pink,yellow);
+}
+* {
+  	box-sizing: border-box;
+}
+
+.column {
+  	float: left;
+  	width: 33.33%;
+  	padding: 5px;
+}
+
+.row::after {
+  	content: "";
+  	clear: both;
+  	display: table;
+}
+header{
+	font-size: 30px;
+	font-style: Verdana;
+	border: 2px solid pink;
+	box-shadow:5px 10px;
+	text-align:center;
+	background-color:pink;
+}
+pre{
+	border: 3px inset black;
+	box-shadow: 5px 8px black;
+	border-radius:2px;
+	background-color:lavender;
+	color:red;
+	width: 40%;
+  	padding-left: 15px;
+  	padding-bottom: 15px;
+  	margin-left: 250px;
+}
+figcaption{
+font-style:italic;
+color:blue;
+font-size:20px;
+}

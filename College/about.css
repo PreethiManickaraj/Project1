@@ -1,0 +1,60 @@
+body{
+	background-image:linear-gradient(to right,skyblue,yellow);
+	font-style:italic;
+}
+.heading{
+	font-size:40px;
+	font-family: monospace;
+	border:2px inset pink;
+	margin: 20px;
+	border-radius: 10px;
+	background-color:pink;
+	text-align: center;
+	text-shadow: 2px 2px 5px white;
+	box-shadow: 2px 2px 5px black;
+}
+aside{
+  	font-family: cursive;
+  	background-color: lightpink;
+	width: 700px;
+}
+footer{
+  	padding-left: 15px;
+  	margin-left: 15px;
+	margin-top: 70px;
+  	float:left;
+  	font-family: cursive;
+  	background-color: lavender;
+  	box-shadow: 5px 10px;
+}
+section{
+	font-size:30px;
+	color:red;
+	text-align: center;
+	text-decoration: underline;
+}
+.img1 {
+	float:right;
+}
+.img2 {
+float: right;
+width: 200px;
+height: 150px;
+margin-left:20px;
+margin-top: 10px;
+}
+@media only screen and (max-width: 600px) {
+   .heading{background: red;}
+}
+@media only screen and (min-width: 600px) {
+  .heading {background: green;}
+}
+@media only screen and (min-width: 768px) {
+  .heading {background: blue;}
+} 
+@media only screen and (min-width: 992px) {
+  .heading {background: orange;}
+} 
+@media only screen and (min-width: 1200px) {
+  .heading{background: pink;}
+}
