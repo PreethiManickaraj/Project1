@@ -1,0 +1,72 @@
+body {
+  margin: 0;
+  background: linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),url("https://image.shutterstock.com/image-illustration/shopping-online-on-smartphone-concept-260nw-1891483270.jpg");
+  background-repeat:no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+}
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding:3px;
+  width: 25%;
+  background-color: black;
+  position: fixed;
+  height: 100%;
+  overflow: auto;
+}
+
+li a {
+  display: block;
+  color: white;
+  padding: 8px 16px;
+  text-decoration: none;
+}
+
+li a.active {
+  background-color: purple;
+  color: white;
+}
+
+li a:hover:not(.active) {
+  background-color: grey;
+  color: white;
+}
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  margin: 0;
+  text-align: center;
+  font-family: arial;
+}
+
+.price {
+  color: grey;
+  font-size: 22px;
+}
+
+.card button {
+  border: none;
+  outline: 0;
+  padding: 12px;
+  color: white;
+  background-color: #000;
+  text-align: center;
+  cursor: pointer;
+  width: 100%;
+  font-size: 18px;
+}
+
+.card button:hover {
+  opacity: 0.7;
+}
+.card {
+  	float: left;
+  	width: 33.33%;
+  	padding: 10px;
+}
+
+.row::after {
+  	content: "";
+  	clear: both;
+  	display: table;
+}
