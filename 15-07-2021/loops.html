@@ -1,0 +1,67 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Loop example</title>
+    </head>
+    <body>
+        <h1><center>Loop concepts</center></h1>
+        <p id="demo"></p>
+        <label for="search">Search by contact name: </label>
+        <input id="search" type="text">
+        <button id="buton">Search</button>
+        <p id="demo1"></p>
+        <label for="series">Enter number: </label>
+        <input id="series" type="text">
+        <button id="buton1">Generate series</button>
+        <p id="demo2"></p>
+        <script>
+            //for loop example
+            const languages = ['HTML','CSS','JS'];
+            let info = 'Languages known : ';
+            const para = document.getElementById('demo');
+            for(let i = 0; i < languages.length; i++) {
+                if(i===languages.length-1){
+                    info += 'and ' + languages[i] + '.';
+                }else {
+                    info += languages[i] + ', ';
+                }
+            }
+            para.textContent = info;
+            //break
+            const name = ['Pree:123','Priya:456','Swe:789'];
+            const para1 = document.getElementById('demo1');
+            const input = document.getElementById('search');
+            const btn = document.getElementById('buton');
+            btn.addEventListener('click', function() {
+                let searchName = input.value.toLowerCase();
+                input.value = '';
+                for (let i = 0; i < name.length; i++) {
+                    let splitContact = name[i].split(':');
+                    if (splitContact[0].toLowerCase() === searchName) {
+                        para1.textContent = splitContact[0] + '\'s number is ' + splitContact[1] + '.';
+                        break;
+                    } else if (i === name.length - 1) {
+                        para1.textContent = 'Contact not found.';
+                    }
+                }
+            });
+            //continue
+            const input1 = document.getElementById('series');
+            const para2 = document.getElementById('demo2');
+            const btn1 = document.getElementById('buton1');
+            btn1.addEventListener('click', function() {
+                para2.textContent = 'Output: ';
+                let num = input1.value;
+                input1.value = '';
+                input1.focus();
+                for (let i = 1; i <= num; i++) {
+                    let sqRoot = Math.sqrt(i);
+                    if(Math.floor(sqRoot) !== sqRoot) {
+                        continue;
+                    }
+                    para2.textContent += i + ' ';
+                }
+            });
+        </script>
+    </body>
+</html>
