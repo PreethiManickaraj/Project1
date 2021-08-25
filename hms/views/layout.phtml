@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<base href="/localhost" />
+	<meta charset="UTF-8" />
+	<title><?= $title ?></title>
+	<meta name="description" content="<?= $description ?>" />
+</head>
+
+<body>
+<header>
+	<h1>Hospital Management System</h1>
+</header>
+
+
+<article>
+	<div class="message">
+		<span style="color:red" class="error"><?= $error ?></span>
+		<span style="color:green" class="success"><?= $success ?></span>
+		<span style="color:orange" class="warning"><?= $warning ?></span>
+	</div>
+	<?php $this->controller->renderView();  ?>
+</article>
+
+</body>
+</html>
