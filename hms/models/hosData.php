@@ -4,20 +4,17 @@
  */
 class hosData 
 {
-    //instance of dbConnect class
     private $dbConnect;
 
     public function __construct()
     {
         $dbConnect =  new dbConnect();;
-        // instantiates for dbConnect class
         $this->dbConnect = $dbConnect->connect();
     }
 
     public function addStaff($name,$email,$password)
     {
         if(!$this->isExistingStaff($email)) {
-            //$query = "INSERT INTO  $tableName(firstname,lastname,email,password)VALUES(?,?,?,?)";
             $stmt = $this->dbConnect->prepare("INSERT INTO staff(name,email,password)VALUES(?,?,?)");
             $stmt->execute([$name, $email, $password]);
         } else {
@@ -37,7 +34,6 @@ class hosData
     public function addPatient($firstname,$lastname,$gender,$dob,$age,$email,$contact,$password,$address)
     {
         if(!$this->isExistingPatient($email)) {
-            //$query = "INSERT INTO  $tableName(firstname,lastname,email,password)VALUES(?,?,?,?)";
             $stmt = $this->dbConnect->prepare("INSERT INTO patient(firstName,lastName,gender,contact,age,address,email,dob,password)
             VALUES(?,?,?,?,?,?,?,?,?)");
             $stmt->execute([$firstname,$lastname,$gender,$contact,$age,$address,$email,$dob,$password]);
@@ -55,13 +51,13 @@ class hosData
         return count($records) > 0 ? true : false;
     }
 
-    public function addDoctor($firstname,$lastname,$gender,$dob,$age,$email,$contact,$password,$address)
+    public function addDoctor($firstname,$lastname,$gender,$dob,$age,$email,$contact,$password,$address,$qualification)
     {
-        if(!$this->isExistingDoctor($email)) {
-            //$query = "INSERT INTO  $tableName(firstname,lastname,email,password)VALUES(?,?,?,?)";
-            $stmt = $this->dbConnect->prepare("INSERT INTO doctor(firstName,lastName,gender,contact,age,address,email,dob,password)
-            VALUES(?,?,?,?,?,?,?,?,?)");
-            $stmt->execute([$firstname,$lastname,$gender,$contact,$age,$address,$email,$dob,$password]);
+        if(!$this->isExistingDoctor($email)) 
+        {
+            $stmt = $this->dbConnect->prepare("INSERT INTO doctor(firstName,lastName,contact,age,dob,gender,address,qualification,email,password)
+            VALUES(?,?,?,?,?,?,?,?,?,?)");
+            $stmt->execute([$firstname,$lastname,$contact,$age,$dob,$gender,$address,$qualification,$email,$password]);
         } else {
             throw new EntityAlreadyExistsException(sprintf('%s user already exists.', $email));
         }

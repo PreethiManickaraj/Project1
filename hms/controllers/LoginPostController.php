@@ -40,7 +40,6 @@ class LoginPostController extends Controller
         } 
         
         if($success){
-            // calling  addSuccessMessage method in Validator class to show success message
             if($postData['email']==='admin@gmail.com' && $postData['password']==='admin')
             {
                 $this->messageManager->addSuccessMessage('Login Successfull.');

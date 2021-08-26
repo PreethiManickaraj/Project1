@@ -11,7 +11,8 @@ class DoctorPostController extends Controller
         'email' => 'email',
         'contact' => 'int',
         'password' => 'string',
-        'address' => 'string'
+        'address' => 'string',
+        'qualification' => 'string'
     ];
     protected $validator;
     protected $hosData;
@@ -32,7 +33,7 @@ class DoctorPostController extends Controller
         }
         $success = false;
         try {
-            $this->hosData->addDoctor($postData['firstname'],$postData['lastname'],$postData['gender'],$postData['dob'],$postData['age'],$postData['email'],$postData['contact'],md5($postData['password']),$postData['address']);
+            $this->hosData->addDoctor($postData['firstname'],$postData['lastname'],$postData['gender'],$postData['dob'],$postData['age'],$postData['email'],$postData['contact'],md5($postData['password']),$postData['address'],$postData['qualification']);
             $success = true;
         }catch (EntityAlreadyExistsException $ea){
             $this->messageManager->addErrorMessage($ea->getMessage());
