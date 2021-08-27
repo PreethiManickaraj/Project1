@@ -14,11 +14,11 @@ class PatientPostController extends Controller
         'address' => 'string'
     ];
     protected $validator;
-    protected $hosData;
+    protected $PatientData;
     public function __construct()
     {
         $this->validator = new Validator($this->fields);
-        $this->hosData = new hosData();
+        $this->PatientData = new PatientData();
         parent::__construct();
     }
     public function process($params)
@@ -32,7 +32,7 @@ class PatientPostController extends Controller
         }
         $success = false;
         try {
-            $this->hosData->addPatient($postData['firstname'],$postData['lastname'],$postData['gender'],$postData['dob'],$postData['age'],$postData['email'],$postData['contact'],md5($postData['password']),$postData['address']);
+            $this->PatientData->addPatient($postData['firstname'],$postData['lastname'],$postData['gender'],$postData['dob'],$postData['age'],$postData['email'],$postData['contact'],md5($postData['password']),$postData['address'],$postData['district'],$postData['state'],$postData['country'],$postData['pincode']);
             $success = true;
         }catch (EntityAlreadyExistsException $ea){
             $this->messageManager->addErrorMessage($ea->getMessage());

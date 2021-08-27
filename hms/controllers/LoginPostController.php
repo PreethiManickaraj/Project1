@@ -1,9 +1,5 @@
 <?php 
 
-/**
- *  RegisterPostController class validates the fields given in forms.
- */
-
 class LoginPostController extends Controller
 {
     protected $fields = [
@@ -12,17 +8,24 @@ class LoginPostController extends Controller
     ];
     protected $validator;
 
-    protected $hosData;
+    protected $adminData;
+    protected $patientData;
+    protected $staffData;
+    protected $doctorData;
     public function __construct()
     {
         $this->validator = new Validator($this->fields);
-        $this->hosData = new hosData();
+        $this->adminData = new AdminData();
+        $this->patientData = new PatientData();
+        $this->staffData = new StaffData();
+        $this->doctorData = new DoctorData();
         parent::__construct();
     }
 
     public function process($params)
     {
         $postData = $_POST;
+        //print_r($postData);
         $errors = $this->validator->process($postData);
        
         if($errors) {
@@ -31,7 +34,6 @@ class LoginPostController extends Controller
         }
         $success = false;
         try {
-            $this->hosData->loginUser($postData['email'],$postData['password']);
             $success = true;
         }catch (EntityAlreadyExistsException $ea){
             $this->messageManager->addErrorMessage($ea->getMessage());
@@ -40,13 +42,51 @@ class LoginPostController extends Controller
         } 
         
         if($success){
-            if($postData['email']==='admin@gmail.com' && $postData['password']==='admin')
-            {
+            switch($postData['role']){
+            case 'admin':
+                $login = $this->adminData->selectAdmin($postData['email'],md5($postData['password']));
+                if($login[0]['email']===$postData['email'] && $login[0]['password']===md5($postData['password']))
+                {
                 $this->messageManager->addSuccessMessage('Login Successfull.');
                 $this->redirect('admin');
-            } else{
+                } else{
                 $this->messageManager->addErrorMessage('Enter correct credentials');
                 $this->redirect('login');
+                }
+                break;
+            case 'staff':
+                $login = $this->staffData->selectStaff($postData['email'],md5($postData['password']));
+                if($login[0]['email']===$postData['email'] && $login[0]['password']===md5($postData['password']))
+                {
+                $this->messageManager->addSuccessMessage('Login Successfull.');
+                $this->redirect('staff');
+                } else{
+                $this->messageManager->addErrorMessage('Enter correct credentials');
+                $this->redirect('login');
+                }
+                break;
+            case 'patient':
+                $login = $this->patientData->selectPatient($postData['email'],md5($postData['password']));
+                if($login[0]['email']===$postData['email'] && $login[0]['password']===md5($postData['password']))
+                {
+                $this->messageManager->addSuccessMessage('Login Successfull.');
+                $this->redirect('patient');
+                } else{
+                $this->messageManager->addErrorMessage('Enter correct credentials');
+                $this->redirect('login');
+                }
+                break;
+            case 'doctor':
+                $login = $this->doctorData->selectDoctor($postData['email'],md5($postData['password']));
+                if($login[0]['email']===$postData['email'] && $login[0]['password']===md5($postData['password']))
+                {
+                $this->messageManager->addSuccessMessage('Login Successfull.');
+                $this->redirect('patient');
+                } else{
+                $this->messageManager->addErrorMessage('Enter correct credentials');
+                $this->redirect('login');
+                }
+                break;
             }
         }
     }

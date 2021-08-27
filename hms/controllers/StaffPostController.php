@@ -8,11 +8,11 @@ class StaffPostController extends Controller
         'password' => 'string'
     ];
     protected $validator;
-    protected $hosData;
+    protected $StaffData;
     public function __construct()
     {
         $this->validator = new Validator($this->fields);
-        $this->hosData = new hosData();
+        $this->StaffData = new StaffData();
         parent::__construct();
     }
     public function process($params)
@@ -26,7 +26,7 @@ class StaffPostController extends Controller
         }
         $success = false;
         try {
-            $this->hosData->addStaff($postData['StaffName'],$postData['email'],md5($postData['password']));
+            $this->StaffData->addStaff($postData['StaffName'],$postData['email'],md5($postData['password']));
             $success = true;
         }catch (EntityAlreadyExistsException $ea){
             $this->messageManager->addErrorMessage($ea->getMessage());

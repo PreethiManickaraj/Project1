@@ -5,8 +5,8 @@ class AdminController extends Controller
     public function process($postParams)
     {
         $this->head = array(
-            'title'=>'Login form',
-            'description'=>'Click here to Login'
+            'title'=>'Admin form',
+            'description'=>'ADMIN PAGE'
         );
         if(isset($_POST['name'])){
             switch($_POST['name']){
