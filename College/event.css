@@ -1,0 +1,49 @@
+table,th,td {
+ border: 2px solid black;
+ border-collapse: collapse;
+}
+th {
+ text-align: center;
+ color:red;
+ background-color:pink;
+}
+td {
+padding: 5px;
+}
+header{
+text-align: center;
+border: 5px outset black;
+text-shadow: 2px 2px 5px black;
+color:white;
+background-image: linear-gradient(to right,red,black);
+margin: 30px;
+padding: 10px;
+font-size: 30px;
+font-family: monospace;
+}
+body{
+background-image: url("https://blog.commlabindia.com/wp-content/uploads/2019/07/animated-gifs-corporate-training.gif");
+background-size: cover;
+background-repeat: no-repeat;
+background-attachment: fixed;
+}
+p{
+font-size:30px;
+text-align: center;
+text-shadow: 2px 2px 6px red;
+}
+dt{
+font-size: 20px;
+font-family: monospace;
+color: white;
+}
+aside{
+width: 20%;
+  	padding-left: 15px;
+  	padding-bottom: 15px;
+  	margin-left: 15px;
+  	float: right;
+  	font-style: italic;
+  	background-color: lightgray;
+	outline-style: inset;
+}

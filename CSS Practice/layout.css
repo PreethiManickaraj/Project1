@@ -1,0 +1,12 @@
+body{
+column-count: 2;
+#column-gap: 40px;
+#column-rule-style: solid;
+#column-rule-width: 5px;
+#column-rule-color: blue;
+column-rule: 5px solid pink;
+#column-width: 100px;
+}
+header {
+column-span: all;
+}

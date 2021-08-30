@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Conditionals example</title>
+    </head>
+    <body>
+        <!--if else if example-->
+        <label for="fav">Select your favourite color: </label>
+        <select id="fav">
+            <option value="">--Make a choice--</option>
+            <option value="Pink">Pink</option>
+            <option value="Black">Black</option>
+            <option value="Blue">Blue</option>
+            <option value="Red">Red</option>
+        </select>
+
+        <p id="demo"></p>
+        <!--switch example -->
+        <label for="fav1">Select your place: </label>
+        <select id="fav1">
+            <option value="">--Make a choice--</option>
+            <option value="Chennai">Chennai</option>
+            <option value="Paris">Paris</option>
+            <option value="Mumbai">Mumbai</option>
+            <option value="Pune">Pune</option>
+        </select>
+
+        <p id="demo1"></p>
+        <!--ternary operator-->
+        <label for="theme">Select theme: </label>
+        <select id="theme" onchange="settheme(this.value)">
+            <option value="">--Make a choice--</option>
+            <option value="black">Black</option>
+            <option value="white">White</option>
+        </select>
+
+        <script>
+            //if else if
+            const select = document.getElementById('fav');
+            const para = document.getElementById('demo');
+            select.onchange = setfav;
+
+            function setfav() {
+                const choice = select.value;
+
+                if(choice === 'Pink') {
+                    para.textContent = 'Favorite color is Pink';
+                } else if(choice === 'Black') {
+                    para.textContent = 'Favorite color is Black';
+                } else {
+                    para.textContent = 'None';
+                }
+            }
+            //switch
+            const select1 = document.getElementById('fav1');
+            const para1 = document.getElementById('demo1');
+            select1.onchange = setplace;
+            function setplace() {
+                const choice1 = select1.value;
+                switch(choice1) {
+                    case 'Chennai':
+                        para1.textContent = "Fav place Chennai";
+                        break;
+                    case 'Paris':
+                        para1.textContent = "Fav place Paris";
+                        break;
+                    case 'Mumbai':
+                        para1.textContent = "Fav place is Mumbai";
+                        break;
+                    default : 
+                        para1.textContent = "None";
+                }
+            }
+            //ternary operator
+            const color = document.getElementById('theme');
+            function update(bgcolor,textcolor) {
+                document.body.style.background = bgcolor;
+                document.body.style.color = textcolor;
+            }
+            function settheme(value) {
+                ( color.value === 'black' ) ? update('black','white') : update('white','black');
+                console.log(color);
+            }
+        </script>
+    </body>
+</html>
