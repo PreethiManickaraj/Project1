@@ -24,6 +24,23 @@ class PatientData
         }
     }
 
+    public function updatePatient($firstname,$lastname,$gender,$dob,$age,$email,$contact,$password,$address,$district,$state,$country,$pincode)
+    {
+        $table = self::TABLE_NAME;
+        $id=$this->getPatientId($email);
+        $stmt = $this->dbConnect->prepare("UPDATE $table SET firstname=?,lastname=?,gender=?,dob=?,age=?,email=?,contact=?,password=?,address=?,district=?,state=?,country=?,pincode=? WHERE p_id = ?");
+        $stmt->execute([$firstname,$lastname,$gender,$dob,$age,$email,$contact,$password,$address,$district,$state,$country,$pincode,$id]);
+    }
+
+    public function getPatientId($email)
+    {
+        $table = self::TABLE_NAME;
+        $stmt = $this->dbConnect->prepare("SELECT p_id FROM $table WHERE email=?");
+        $stmt->execute([$email]);
+        $record = $stmt->fetch();
+        return $record['p_id'];  
+    }
+
     public function isExistingPatient($email)
     {
         $table = self::TABLE_NAME;

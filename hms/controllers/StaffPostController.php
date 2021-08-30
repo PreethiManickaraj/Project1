@@ -26,18 +26,33 @@ class StaffPostController extends Controller
         }
         $success = false;
         try {
-            $this->StaffData->addStaff($postData['StaffName'],$postData['email'],md5($postData['password']));
+            switch($postData['submit'])
+            {
+                case 'addStaff':
+                    $this->StaffData->addStaff($postData['StaffName'],$postData['email'],md5($postData['password']));
+                    break;
+                case 'update':
+                    $this->StaffData->updateStaff($postData['StaffName'],$postData['email'],md5($postData['password']));
+                    break;
+            }
             $success = true;
         }catch (EntityAlreadyExistsException $ea){
             $this->messageManager->addErrorMessage($ea->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addErrorMessage('Unable to add the staff');
         } 
-        
         if($success)
         {
-            $this->messageManager->addSuccessMessage('Staff Added Successfully');
-            $this->redirect('admin');
+            if($postData['submit']==='addStaff')
+            {
+                $this->messageManager->addSuccessMessage('Staff Added Successfully!!!');
+                $this->redirect('admin');
+            }
+            if($postData['submit']==='update')
+            {
+                $this->messageManager->addSuccessMessage('Staff Updated...');
+                $this->redirect('admin');
+            }
         }
     }
 }

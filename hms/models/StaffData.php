@@ -23,6 +23,22 @@ class StaffData
         }
     }
 
+    public function updateStaff($name,$email,$password)
+    {
+        $table = self::TABLE_NAME;
+        $id = $this->getStaffId($email);
+        $stmt = $this->dbConnect->prepare("UPDATE $table SET name=?,email=?,password=? WHERE staff_id = ?");
+        $stmt->execute([$name, $email, $password,$id]);
+    }
+
+    public function getStaffId($email)
+    {
+        $table = self::TABLE_NAME;
+        $stmt = $this->dbConnect->prepare("SELECT staff_id FROM $table WHERE email=?");
+        $record = $stmt->execute([$email]);
+        return $record;
+    }
+
     public function isExistingStaff($email)
     {
         $table = self::TABLE_NAME;

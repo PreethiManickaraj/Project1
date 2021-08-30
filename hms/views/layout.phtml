@@ -6,13 +6,10 @@
 	<title><?= $title ?></title>
 	<meta name="description" content="<?= $description ?>" />
 </head>
-
 <body>
 <header>
-	<h1>Hospital Management System</h1>
+	<h1><center>Hospital Management System</center></h1>
 </header>
-
-
 <article>
 	<div class="message">
 		<span style="color:red" class="error"><?= $error ?></span>
@@ -21,6 +18,5 @@
 	</div>
 	<?php $this->controller->renderView();  ?>
 </article>
-
 </body>
 </html>

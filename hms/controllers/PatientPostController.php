@@ -28,22 +28,37 @@ class PatientPostController extends Controller
        
         if($errors) {
             $this->messageManager->addErrorMessage(implode(' </br>', $errors));
-            return $this->redirect('patient');
+            return $this->redirect('addpatient');
         }
         $success = false;
         try {
-            $this->PatientData->addPatient($postData['firstname'],$postData['lastname'],$postData['gender'],$postData['dob'],$postData['age'],$postData['email'],$postData['contact'],md5($postData['password']),$postData['address'],$postData['district'],$postData['state'],$postData['country'],$postData['pincode']);
+            switch($postData['submit']){
+                case 'addPatient':
+                    $this->PatientData->addPatient($postData['firstname'],$postData['lastname'],$postData['gender'],$postData['dob'],$postData['age'],$postData['email'],$postData['contact'],md5($postData['password']),$postData['address'],$postData['district'],$postData['state'],$postData['country'],$postData['pincode']);
+                    break;
+                case 'update':
+                    $this->PatientData->updatePatient($postData['firstname'],$postData['lastname'],$postData['gender'],$postData['dob'],$postData['age'],$postData['email'],$postData['contact'],md5($postData['password']),$postData['address'],$postData['district'],$postData['state'],$postData['country'],$postData['pincode']);
+                    break;
+                }
             $success = true;
         }catch (EntityAlreadyExistsException $ea){
             $this->messageManager->addErrorMessage($ea->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addErrorMessage('Unable to add patient');
-        } 
+        }
         
         if($success)
         {
-            $this->messageManager->addSuccessMessage('Patient details added Successfully');
-            $this->redirect('admin');
+            if($postData['submit']==="addPatient")
+            {
+                $this->messageManager->addSuccessMessage('Patient details added Successfully');
+                $this->redirect('admin');
+            }
+            if($postData['submit']==='update')
+            {
+                $this->messageManager->addSuccessMessage('Patient details updated');
+                $this->redirect('admin');
+            }
         }
     }
 }

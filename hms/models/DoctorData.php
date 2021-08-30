@@ -25,6 +25,24 @@ class DoctorData
         }
     }
 
+    public function updateDoctor($firstname,$lastname,$gender,$dob,$age,$email,$contact,$password,$address,$qualification,$district,$state,$country,$pincode)
+    {
+        $table = self::TABLE_NAME;
+        $id=$this->getDoctorId($email);
+        $stmt = $this->dbConnect->prepare("UPDATE $table SET firstName=?,lastName=?,contact=?,age=?,dob=?,gender=?,address=?,qualification=?,email=?,password=?,district=?,state=?,country=?,pincode=?");
+        $stmt->execute([$firstname,$lastname,$contact,$age,$dob,$gender,$address,$qualification,$email,$password,$district,$state,$country,$pincode]);
+    }
+
+    public function getDoctorId($email)
+    {
+        $table = self::TABLE_NAME;
+        $stmt = $this->dbConnect->prepare("SELECT d_id FROM $table WHERE email=?");
+        $stmt->execute([$email]);
+        $record = $stmt->fetch();
+        return $record['d_id'];
+        
+    }
+
     public function isExistingDoctor($email)
     {
         $table = self::TABLE_NAME;

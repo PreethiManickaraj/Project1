@@ -1,6 +1,6 @@
 <?php
 
-class PatientController extends Controller 
+class UpdatePatientController extends Controller 
 {
     public function process($postParams)
     {
@@ -9,6 +9,6 @@ class PatientController extends Controller
             'description'=>'Click here to add details'
         );
 
-        $this->view = 'addpatient';
+        $this->view = 'updatePatient';
     }
 }
