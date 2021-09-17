@@ -1,6 +1,25 @@
-<ul>
-  <li><a href="#">Home</a></li>
-  <li><a href="#">Staff</a></li>
-  <li><a href="#">Patient</a></li>
-  <li><a href="#">Doctor</a></li>
-</ul>
+<nav>
+  <ul>
+    <li><a href="AdminHome">Home</a></li>
+    <li><a>Patient</a>
+      <ul class="dropdown">
+        <li><a href="Patient">Add Patient</a></li>
+        <li><a href="ListPatients">List Patient</a></li>
+      </ul>
+    </li>
+    <li><a>Staff</a>
+      <ul class="dropdown">
+        <li><a href="staff">Add Staff</a></li>
+        <li><a href="ListStaffs">List Staff</a></li>
+      </ul>
+    </li>
+    <li><a>Doctor</a>
+      <ul class="dropdown">
+        <li><a href="Doctor">Add Doctor</a></li>
+        <li><a href="ListDoctors">List Doctor</a></li>
+      </ul>
+    </li>
+    <li class="profile"><a href="profile">My Profile</a></li>
+    <li class="logout"><a href="logout">Logout</a></li>
+  </ul>
+</nav>

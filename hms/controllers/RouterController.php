@@ -1,42 +1,31 @@
 <?php
 
-/*
-* RouterController class is used to call appropriate
-* controllers according to users URL.
-*/
-
+/**
+ * RouterController class is used to call appropriate
+ * controllers according to users URL.
+ * @var controller Inner controller instance
+ */
 class RouterController extends Controller
 {
-	/**
-	 * @var controller Inner controller instance
-	 */
 	protected $controller;
-
 	/**
+	 *  Method for segregating slashes and url.
 	 *  @param string $url for passing url address
 	 *  @return array url parameters
 	 */
-
 	private function parseUrl($url)
 	{
-		//parses url into associative arrays
 		$parsedUrl = parse_url($url);
-		//removes slashes from url
 		$parsedUrl["path"] = ltrim($parsedUrl["path"], "/");
-		//removes whitespaces
 		$parsedUrl["path"] = trim($parsedUrl["path"]);
-		//splits the address by slashes
 		$explodedUrl = explode("/", $parsedUrl["path"]);
-
 		return $explodedUrl;
 	}
-
 	/**
 	 *  This function is used for converting first letter of word to uppercase
 	 *  @param string controller name is passed
 	 *  @return string returns controller class name's first letter as uppercase
 	 */
-
 	private function dashesToCamel($text)
 	{
 		$text = str_replace('-', ' ', $text);
@@ -44,32 +33,27 @@ class RouterController extends Controller
 		$text = str_replace(' ', '', $text);
 		return $text;
 	}
-
 	/**
 	 *  Parses url address and creates appropriate controller
 	 *  @param array $params url address in array 
+	 *  @var array $parsedUrl has the url in associative array.
+	 *  @var string $controllerClass has the controller name.
 	 */
 	public function process($params)
 	{
 		$parsedUrl = $this->parseUrl($params[0]);
-		//print_r($parsedUrl);
-
-		if (empty($parsedUrl[0])){
-			$controllerClass = 'IndexController';
-		} else {
-		// controller name is the first parameter of the url	
-		$controllerClass = $this->dashesToCamel(array_shift($parsedUrl)) . 'Controller';
+		if(empty($parsedUrl[0])) {
+			$controllerClass = 'HomeController';
+		} else {	
+			$controllerClass = $this->dashesToCamel(array_shift($parsedUrl)) . 'Controller';
 		}
-
-		if (file_exists('controllers/' . $controllerClass . '.php'))
+		if(file_exists('controllers/' . $controllerClass . '.php')) {
 			$this->controller = new $controllerClass;
-		else
+		}
+		else {
 			$this->redirect('error');
-
-		// Calls the controller
+		}
 		$this->controller->process($parsedUrl);
-
-		// Setting main template
 		$this->view = 'layout';
 		$this->head  = $this->controller->head;
 	}

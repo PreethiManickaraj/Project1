@@ -1,0 +1,133 @@
+<?php 
+if($_SESSION['role']==="staff"){
+?>
+<nav>
+  <ul>
+    <li><a href="StaffHome">Home</a></li>
+    <li><a>Patient</a>
+      <ul class="dropdown">
+        <li><a href="Patient">Add Patient</a></li>
+        <li><a href="ListPatients">List Patient</a></li>
+      </ul>
+    </li>
+    <li><a>Doctor</a>
+      <ul class="dropdown">
+        <li><a href="Doctor">Add Doctor</a></li>
+        <li><a href="ListDoctors">List Doctor</a></li>
+      </ul>
+    </li>
+    <li class="profile"><a href="profile">My Profile</a></li>
+    <li class="logout"><a href="logout">Logout</a></li>
+  </ul>
+</nav>
+<?php
+$doctors = new DoctorData();
+?>
+<?php $doctorsList = $doctors->listDoctors(); ?>
+<div><br>
+    <table>
+        <thead>
+            <th>ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Contact</th>
+            <th>Gender</th>
+            <th>Qualification</th>
+            <th>Email</th>
+            <th>District</th>
+            <th>State</th>
+            <th>Country</th>
+            <th>Actions</th>
+        </thead>
+        <tbody>
+            <?php while ($row = $doctorsList->fetch(PDO::FETCH_ASSOC)) {
+                ?>
+                <tr>
+                    <td><?= $row['d_id']?></td>
+                    <td><?= $row['firstName'] ?></td>
+                    <td><?= $row['lastName'] ?></td>
+                    <td><?= $row['contact'] ?></td>
+                    <td><?= $row['gender'] ?></td>
+                    <td><?= $row['qualification'] ?></td>
+                    <td><?= $row['email'] ?></td>
+                    <td><?= $row['district'] ?></td>
+                    <td><?= $row['state'] ?></td>
+                    <td><?= $row['country'] ?></td>
+                    <td><button><a href="ViewDoctor?d_id=<?= $row['d_id']?>">View</a></button>  <button><a href="updateDoctor?d_id=<?= $row['d_id']?>">Edit</a></button></td>
+                </tr>
+            <?php } ?>
+        </tbody>
+    </table>
+</div>
+<?php } ?>
+
+<?php 
+if($_SESSION['role']==="admin"){
+?>
+<nav>
+  <ul>
+    <li><a href="AdminHome">Home</a></li>
+    <li><a>Patient</a>
+      <ul class="dropdown">
+        <li><a href="Patient">Add Patient</a></li>
+        <li><a href="ListPatients">List Patient</a></li>
+      </ul>
+    </li>
+    <li><a>Staff</a>
+      <ul class="dropdown">
+        <li><a href="staff">Add Staff</a></li>
+        <li><a href="ListStaffs">List Staff</a></li>
+      </ul>
+    </li>
+    <li><a>Doctor</a>
+      <ul class="dropdown">
+        <li><a href="Doctor">Add Doctor</a></li>
+        <li><a href="ListDoctors">List Doctor</a></li>
+      </ul>
+    </li>
+    <li class="profile"><a href="profile">My Profile</a></li>
+    <li class="logout"><a href="logout">Logout</a></li>
+  </ul>
+</nav>
+<?php
+$doctors = new DoctorData();
+?>
+<?php $doctorsList = $doctors->listDoctors(); ?>
+<div><br>
+    <table>
+        <thead>
+            <th>ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Contact</th>
+            <th>Gender</th>
+            <th>Qualification</th>
+            <th>Email</th>
+            <th>District</th>
+            <th>State</th>
+            <th>Country</th>
+            <th>Actions</th>
+        </thead>
+        <tbody>
+            <?php while ($row = $doctorsList->fetch(PDO::FETCH_ASSOC)) {
+                ?>
+                <tr>
+                    <td><?= $row['d_id']?></td>
+                    <td><?= $row['firstName'] ?></td>
+                    <td><?= $row['lastName'] ?></td>
+                    <td><?= $row['contact'] ?></td>
+                    <td><?= $row['gender'] ?></td>
+                    <td><?= $row['qualification'] ?></td>
+                    <td><?= $row['email'] ?></td>
+                    <td><?= $row['district'] ?></td>
+                    <td><?= $row['state'] ?></td>
+                    <td><?= $row['country'] ?></td>
+                    <td><button><a href="ViewDoctor?d_id=<?= $row['d_id']?>">View</a></button>  <button><a href="updateDoctor?d_id=<?= $row['d_id']?>">Edit</a></button></td>
+                </tr>
+            <?php } ?>
+        </tbody>
+    </table>
+</div>
+<?php } ?>
+
+

@@ -5,6 +5,8 @@
  *  @var array $data indexes will be accessible as variables in templates
  *  @var string $view template name without extension
  *  @var array $head  stores HTML head
+ *  @var object $messageManager is instance of MessageManager class
+ *  @var array $messages is used to store error and success messages
  */
 abstract class Controller
 {
@@ -13,22 +15,22 @@ abstract class Controller
 	protected $head = array('title' => '', 'description' => '');
     protected $messageManager;
     protected $messages = [];
-    
+    /**
+     *  Method for instantiate object for MessageManager class.
+     */
     public function __construct()
     {
-        // instantiates the MessageManager class
         $this->messageManager = new MessageManager();
     }
-    
     /**
-     *  Renders the view page
+     *  Method for rendering to the appropriate view page.
+     *  calling getAllMessages function to display success,error and warning messages.
+     *  gets the appropriate phtml file.
      */
     public function renderView()
     {
-        // calling getAllMessages method in MessageManager class
         $this->messages = $this->messageManager->getAllMessages();
-        if ($this->view)
-        {
+        if ($this->view) {
             extract($this->data);
             extract($this->head);
             extract($this->messages);
@@ -36,22 +38,19 @@ abstract class Controller
         }
         $this->messages = $this->messageManager->unsetMessages();
     }
-    
     /**
+     *  Method for redirecting the pages.
      *  @param string $url redirects to given url
      */
-
 	public function redirect($url)
 	{
 		header("Location: /$url");
 		header("Connection: close");
         exit;
 	}
-    
     /**
      *  main controller method
      *  @param array $params URL parameters 
      */
     abstract function process($params);
-
 }

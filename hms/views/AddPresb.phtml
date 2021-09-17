@@ -1,0 +1,43 @@
+<nav>
+  <ul>
+    <li><a href="DoctorHome">Home</a></li>
+    <li><a>Doctor</a>
+      <ul class="dropdown">
+        <li><a href="ListPatients">List Patients</a></li>
+      </ul>
+    </li>
+    <li class="profile"><a href="profile">My Profile</a></li>
+    <li class="logout"><a href="logout">Logout</a></li> 
+  </ul>
+</nav>
+<?php
+if(isset($_GET['p_id'])) {
+  $id = $_GET['p_id'];
+}
+?>
+<form name="AddPresb" action="AddPresbPost" method="POST">
+    <fieldset>
+        <p>
+          <input type="hidden" id="patientId" name="patientId" value="<?php echo $id ?>"> 
+        </p>
+        <p>
+          <label for="disease">Disease</label>
+          <input type="text" id="disease" name="disease">
+        </p>
+        <p>
+          <label for="drug_name">Drug Name</label>
+          <input type="text" id="drug_name" name="drug_name">
+        </p>
+        <p>
+          <label for="drug_quantity">Drug Quantity</label>
+          <input type="text" id="drug_quantity" name="drug_quantity">
+        </p>
+        <p>
+          <label for="prescription">Add Prescription</label>
+          <textarea id="prescription" name="prescription" rows="4" cols="30"></textarea>
+        </p>
+        <p>
+          <input type= "submit" name="submit" value="Save"> 
+        </p>
+    </fieldset>
+</form> 

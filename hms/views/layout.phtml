@@ -2,11 +2,15 @@
 <html lang="en">
 <head>
 	<base href="/localhost" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0">
 	<meta charset="UTF-8" />
 	<title><?= $title ?></title>
+	<link rel="stylesheet" href="views/css/style1.css">
+	<link rel="stylesheet" href="views/css/nav1.css">
+	<link rel="stylesheet" href="views/css/login.css">
 	<meta name="description" content="<?= $description ?>" />
 </head>
-<body>
+<body style="overflow-x:auto;">
 <header>
 	<h1><center>Hospital Management System</center></h1>
 </header>
@@ -18,5 +22,8 @@
 	</div>
 	<?php $this->controller->renderView();  ?>
 </article>
+<footer class="foo">
+	<div>Contact: hms@gmail.com.Copyright 1999-2021. All Rights Reserved.</div>
+</footer>
 </body>
 </html>

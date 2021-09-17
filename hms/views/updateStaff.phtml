@@ -1,18 +1,67 @@
+<head>
+  <style>
+    fieldset{
+      background-color:#CCC;
+      max-width:900px;
+      padding: 20px;	
+      margin-left: 12%;
+      border: 5px outset black;
+    }
+  </style>
+</head>
+<?php 
+if($_SESSION['role']==='admin') {
+?>
+<nav>
+  <ul>
+    <li><a href="AdminHome">Home</a></li>
+    <li><a>Patient</a>
+      <ul class="dropdown">
+        <li><a href="Patient">Add Patient</a></li>
+        <li><a href="ListPatients">List Patient</a></li>
+      </ul>
+    </li>
+    <li><a>Staff</a>
+      <ul class="dropdown">
+        <li><a href="staff">Add Staff</a></li>
+        <li><a href="ListStaffs">List Staff</a></li>
+      </ul>
+    </li>
+    <li><a>Doctor</a>
+      <ul class="dropdown">
+        <li><a href="Doctor">Add Doctor</a></li>
+        <li><a href="ListDoctors">List Doctor</a></li>
+      </ul>
+    </li>
+    <li class="profile"><a href="profile">My Profile</a></li>
+    <li class="logout"><a href="logout">Logout</a></li>
+  </ul>
+</nav>
+<?php } ?>
 <h1>Staff Details</h1>
+<?php
+$staff = new StaffData();
+if(isset($_GET['staff_id'])){
+    $id = $_GET['staff_id'];
+    $row = $staff->viewStaff($id);
+}
+?>
 <form name="staffLogin" method="POST" action="StaffPost">
+  <fieldset>
     <p>
         <label for="StaffName">Enter name</label>
-        <input type="text" id="StaffName" name="StaffName">
+        <input type="text" id="StaffName" name="StaffName" value="<?php echo $row['name'];?>">
     </p>
     <p>
         <label for="email">Enter email</label>
-        <input type="email" id="email" name="email">
+        <input type="email" id="email" name="email" value="<?php echo $row['email'];?>">
     </p>
     <p>
         <label for="password">Enter Password</label>
         <input type="password" id="password" name="password">
     </p>
     <p>
-        <input type="submit" value="update" name="submit">
+        <input type="submit" value="Update" name="submit">
     </p>
+  </fieldset>
 </form>

@@ -1,0 +1,47 @@
+.foo{
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    padding: 5px;
+    background-color: rgb(153, 147, 147);
+    color: white;
+    text-align: center;
+}
+table {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+table td, table th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+table tr:nth-child(even){background-color: #f2f2f2;}
+
+table tr:hover {background-color: #ddd;}
+
+table th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #474d4a;
+  color: white;
+}
+.logout {
+  float:right;
+  padding:5px;
+}
+.profile {
+  float: right;
+  padding: 5px;
+}
+article {
+  margin-left: 15px;
+  margin-right: 15px;
+}
+h1{
+  text-shadow: 2px 2px 8px #565656;
+}

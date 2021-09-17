@@ -7,7 +7,6 @@
  *  @var string $dbName has database name
  * 
  */
-
 class dbConnect
 {
 
@@ -15,7 +14,10 @@ class dbConnect
     private $userName = 'root';
     private $pwd = 'H@rsha07';
     private $dbName = 'hms';
-
+    /**
+     * Method for connecting the database using pdo.
+     * @return PDO
+     */
     public function connect()
     {
         $dsn = 'mysql:host='.$this->host.';dbname='.$this->dbName;

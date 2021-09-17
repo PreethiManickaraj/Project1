@@ -1,0 +1,156 @@
+<?php 
+if($_SESSION['role']==="admin"){
+?>
+<nav>
+  <ul>
+    <li><a href="AdminHome">Home</a></li>
+    <li><a>Patient</a>
+      <ul class="dropdown">
+        <li><a href="Patient">Add Patient</a></li>
+        <li><a href="ListPatients">List Patient</a></li>
+      </ul>
+    </li>
+    <li><a>Staff</a>
+      <ul class="dropdown">
+        <li><a href="staff">Add Staff</a></li>
+        <li><a href="ListStaffs">List Staff</a></li>
+      </ul>
+    </li>
+    <li><a>Doctor</a>
+      <ul class="dropdown">
+        <li><a href="Doctor">Add Doctor</a></li>
+        <li><a href="ListDoctors">List Doctor</a></li>
+      </ul>
+    </li>
+    <li class="profile"><a href="profile">My Profile</a></li>
+    <li class="logout"><a href="logout">Logout</a></li>
+  </ul>
+</nav>
+<?php } ?>
+<?php 
+if($_SESSION['role']==="doctor"){
+?>
+<nav>
+  <ul>
+    <li><a href="DoctorHome">Home</a></li>
+    <li><a>Doctor</a>
+      <ul class="dropdown">
+        <li><a href="ListPatients">List Patients</a></li>
+      </ul>
+    </li>
+    <li class="profile"><a href="profile">My Profile</a></li>
+    <li class="logout"><a href="logout">Logout</a></li>
+  </ul>
+</nav>
+<?php } ?>
+<?php 
+if($_SESSION['role']==="staff"){
+?>
+<nav>
+  <ul>
+    <li><a href="StaffHome">Home</a></li>
+    <li><a>Patient</a>
+      <ul class="dropdown">
+        <li><a href="Patient">Add Patient</a></li>
+        <li><a href="ListPatients">List Patient</a></li>
+      </ul>
+    </li>
+    <li><a>Doctor</a>
+      <ul class="dropdown">
+        <li><a href="Doctor">Add Doctor</a></li>
+        <li><a href="listDoctor">List Doctor</a></li>
+      </ul>
+    </li>
+    <li class="profile"><a href="profile">My Profile</a></li>
+    <li class="logout"><a href="logout">Logout</a></li>
+  </ul>
+</nav>
+<?php } ?>
+<?php 
+if($_SESSION['role']==="patient"){
+?>
+<nav>
+  <ul>
+    <li><a href="PatientHome">Home</a></li>
+    <li class="profile"><a href="profile">My Profile</a></li>
+    <li class="logout"><a href="logout">Logout</a></li>
+  </ul>
+</nav>
+<?php } ?>
+<?php
+$patients = new PatientData();
+if(isset($_GET['p_id'])){
+    $id = $_GET['p_id'];
+    $row = $patients->viewPatient($id);
+}
+?>
+<h3>Patient Details</h3>
+<div>
+    <table>
+        <thead>
+            <th>ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Gender</th>
+            <th>Contact</th>
+            <th>Age</th>
+            <th>Address</th>
+            <th>Email</th>
+            <th>DOB</th>
+            <th>District</th>
+            <th>State</th>
+            <th>Country</th>
+            <th>Pincode</th>
+        </thead>
+        <tbody>
+            <tr>
+                <td><?= $row['p_id'] ?></td>
+                <td><?= $row['firstName'] ?></td>
+                <td><?= $row['lastName'] ?></td>
+                <td><?= $row['gender'] ?></td>
+                <td><?= $row['contact'] ?></td>
+                <td><?= $row['age'] ?></td>
+                <td><?= $row['address'] ?></td>
+                <td><?= $row['email'] ?></td>
+                <td><?= date("d-M-Y",strtotime($row['dob'])) ?></td>
+                <td><?= $row['district'] ?></td>
+                <td><?= $row['state'] ?></td>
+                <td><?= $row['country'] ?></td>
+                <td><?= $row['pincode'] ?></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<?php 
+if(isset($_GET['p_id'])){
+  $id = $_GET['p_id'];
+}
+$presb = new AppointmentData();
+$presbList = $presb->listPresb($id);
+?>
+<br>
+<h3>Prescription Details</h3>
+<div style="overflow-x:auto;">
+    <table>
+        <thead>
+            <th>ID</th>
+            <th>Patient</th>
+            <th>Disease</th>
+            <th>Drug Name</th>
+            <th>Drug Quantity</th>
+            <th>Prescription</th>
+        </thead>
+        <tbody>
+          <?php while($row = $presbList->fetch(PDO::FETCH_ASSOC)) { ?>
+          <tr>
+              <td><?= $row['a_id']?></td>
+              <td><?= $row['firstName'] ?></td>
+              <td><?= $row['disease'] ?></td>
+              <td><?= $row['drug_name'] ?></td>
+              <td><?= $row['drug_quantity'] ?></td>
+              <td><?= $row['prescription'] ?></td>
+          </tr>
+          <?php } ?>
+        </tbody>
+    </table>
+</div>

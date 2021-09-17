@@ -1,5 +1,82 @@
-<h1>Staff Details</h1>
+<head>
+  <style>
+    fieldset{
+      background-color:#CCC;
+      max-width:900px;
+      padding: 20px;	
+      margin-left: 12%;
+      border: 5px outset black;
+    }
+  </style>
+</head>
+<?php 
+if($_SESSION['role']==="admin"){
+?>
+<nav>
+  <ul>
+    <li><a href="AdminHome">Home</a></li>
+    <li><a>Patient</a>
+      <ul class="dropdown">
+        <li><a href="Patient">Add Patient</a></li>
+        <li><a href="ListPatients">List Patient</a></li>
+      </ul>
+    </li>
+    <li><a>Staff</a>
+      <ul class="dropdown">
+        <li><a href="staff">Add Staff</a></li>
+        <li><a href="ListStaffs">List Staff</a></li>
+      </ul>
+    </li>
+    <li><a>Doctor</a>
+      <ul class="dropdown">
+        <li><a href="Doctor">Add Doctor</a></li>
+        <li><a href="ListDoctors">List Doctor</a></li>
+      </ul>
+    </li>
+    <li class="profile"><a href="profile">My Profile</a></li>
+    <li class="logout"><a href="logout">Logout</a></li> 
+  </ul>
+</nav>
+<?php } ?>
+<?php 
+if($_SESSION['role']==="staff"){ ?>
+<nav>
+  <ul>
+    <li><a href="StaffHome">Home</a></li>
+    <li><a>Patient</a>
+      <ul class="dropdown">
+        <li><a href="Patient">Add Patient</a></li>
+        <li><a href="ListPatients">List Patient</a></li>
+        <li><a href="ViewPatients">View Patient</a></li>
+      </ul>
+    </li>
+    <li><a>Users</a>
+      <ul class="dropdown">
+        <li><a href="staff">Add Staff</a></li>
+      </ul>
+    </li>
+    <li><a>Doctor</a>
+      <ul class="dropdown">
+        <li><a href="Doctor">Add Doctor</a></li>
+        <li><a href="listDoctor">List Doctor</a></li>
+      </ul>
+    </li>
+    <li class="profile"><a>My Profile</a>
+      <ul class="dropdown">
+        <li><a href="profile">Menu</a></li>
+      </ul>
+    </li>
+    <li class="logout"><a>Logout</a>
+      <ul class="dropdown">
+        <li  style="text-align:center";><span><a href="logout">Logout <?php echo $_COOKIE['staffname'] ?></a></span></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+<?php } ?>
+<h1><center>Add Staff</center></h1>
 <form name="staffLogin" method="POST" action="StaffPost">
+  <fieldset>
     <p>
         <label for="StaffName">Enter name</label>
         <input type="text" id="StaffName" name="StaffName">
@@ -13,6 +90,7 @@
         <input type="password" id="password" name="password">
     </p>
     <p>
-        <input type="submit" value="addStaff" name="submit">
+        <input type="submit" value="Save" name="submit">
     </p>
+  </fieldset>
 </form>

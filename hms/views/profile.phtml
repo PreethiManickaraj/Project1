@@ -1,0 +1,265 @@
+<head>
+    <style>
+        table {
+        font-family: Arial, Helvetica, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+        }
+
+        table td, table th {
+        border: 1px solid #ddd;
+        padding: 8px;
+        }
+
+        table tr:nth-child(even){background-color: #f2f2f2;}
+
+        table tr:hover {background-color: #ddd;}
+
+        table th {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-align: left;
+        background-color: lavender;
+        color: black;
+        }
+    </style>
+</head>
+<h1><center>User Profile</center></h1>
+<?php 
+if($_SESSION['role']==='admin'){
+?>
+<nav>
+  <ul>
+    <li><a href="AdminHome">Home</a></li>
+    <li><a>Patient</a>
+      <ul class="dropdown">
+        <li><a href="Patient">Add Patient</a></li>
+        <li><a href="ListPatients">List Patient</a></li>
+      </ul>
+    </li>
+    <li><a>Staff</a>
+      <ul class="dropdown">
+        <li><a href="staff">Add Staff</a></li>
+        <li><a href="ListStaffs">List Staff</a></li>
+      </ul>
+    </li>
+    <li><a>Doctor</a>
+      <ul class="dropdown">
+        <li><a href="Doctor">Add Doctor</a></li>
+        <li><a href="ListDoctors">List Doctor</a></li>
+      </ul>
+    </li>
+    <li class="profile"><a href="profile">My Profile</a></li>
+    <li class="logout"><a href="logout">Logout</a></li>
+  </ul>
+</nav>
+<?php } ?>
+<?php 
+if($_SESSION['role']==='staff'){
+?>
+<nav>
+  <ul>
+    <li><a href="StaffHome">Home</a></li>
+    <li><a>Patient</a>
+      <ul class="dropdown">
+        <li><a href="Patient">Add Patient</a></li>
+        <li><a href="ListPatients">List Patient</a></li>
+      </ul>
+    </li>
+    <li><a>Doctor</a>
+      <ul class="dropdown">
+        <li><a href="Doctor">Add Doctor</a></li>
+        <li><a href="ListDoctors">List Doctor</a></li>
+      </ul>
+    </li>
+    <li class="profile"><a href="profile">My Profile</a></li>
+    <li class="logout"><a href="logout">Logout</a></li>
+  </ul>
+</nav>
+<?php } ?>
+<?php 
+if($_SESSION['role']==="patient"){
+?>
+<nav>
+  <ul>
+    <li><a href="PatientHome">Home</a></li>
+    <li class="profile"><a href="profile">My Profile</a></li>
+    <li class="logout"><a href="logout">Logout</a></li>
+  </ul>
+</nav>
+<?php } ?>
+<?php 
+if($_SESSION['role']==='doctor'){
+?>
+<nav>
+  <ul>
+    <li><a href="DoctorHome">Home</a></li>
+    <li><a>Doctor</a>
+      <ul class="dropdown">
+        <li><a href="ListPatients">List Patients</a></li>
+      </ul>
+    </li>
+    <li class="profile"><a href="profile">My Profile</a></li>
+    <li class="logout"><a href="logout">Logout</a></li>
+  </ul>
+</nav>
+<?php } ?>
+<?php 
+if($_SESSION['role']==="admin")
+{
+    $admin = new AdminData();
+    $adminDetails = $admin->profile();
+?>
+<table>
+    <thead>
+        <th>Username</th>
+        <th>User Id</th>
+        <th>Email</th>
+        <th>role</th>
+    </thead>
+    <tbody>
+        <tr>
+            <td><?= $adminDetails[0]['role']?></td>
+            <td><?= $adminDetails[0]['user_id']?></td>
+            <td><?= $adminDetails[0]['email']?></td>
+            <td><?= $adminDetails[0]['role']?></td>
+        </tr>
+    </tbody>
+</table>
+<?php } ?>
+<?php 
+if($_SESSION['role']==="staff")
+{
+    $staff = new StaffData();
+    $cookie=json_decode($_COOKIE['userdata'],true);
+    $staffDetails = $staff->profile($cookie['id']);
+?>
+<table>
+    <thead>
+        <th>Staff Id</th>
+        <th>Name</th>
+        <th>Email</th>
+    </thead>
+    <tbody>
+        <tr>
+            <td><?= $cookie['id']?></td>
+            <td><?= $staffDetails[0]['name']?></td>
+            <td><?= $staffDetails[0]['email']?></td>
+        </tr>
+    </tbody>
+</table>
+<?php } ?>
+<?php 
+if($_SESSION['role']==="patient")
+{
+    $patient = new PatientData();
+    $cookie=json_decode($_COOKIE['userdata'],true);
+    $patientDetails = $patient->profile($cookie['id']);
+?>
+<table>
+    <thead>
+        <th>ID</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Gender</th>
+        <th>Contact</th>
+        <th>Age</th>
+        <th>Address</th>
+        <th>Email</th>
+        <th>DOB</th>
+        <th>District</th>
+        <th>State</th>
+        <th>Country</th>
+        <th>Pincode</th>
+    </thead>
+    <tbody>
+        <tr>
+            <td><?= $patientDetails[0]['p_id'] ?></td>
+            <td><?= $patientDetails[0]['firstName'] ?></td>
+            <td><?= $patientDetails[0]['lastName'] ?></td>
+            <td><?= $patientDetails[0]['gender'] ?></td>
+            <td><?= $patientDetails[0]['contact'] ?></td>
+            <td><?= $patientDetails[0]['age'] ?></td>
+            <td><?= $patientDetails[0]['address'] ?></td>
+            <td><?= $patientDetails[0]['email'] ?></td>
+            <td><?= date("d-M-Y",strtotime($patientDetails[0]['dob'])) ?></td>
+            <td><?= $patientDetails[0]['district'] ?></td>
+            <td><?= $patientDetails[0]['state'] ?></td>
+            <td><?= $patientDetails[0]['country'] ?></td>
+            <td><?= $patientDetails[0]['pincode'] ?></td>
+        </tr>
+    </tbody>
+</table>
+<?php 
+$presb = new AppointmentData();
+$cookie=json_decode($_COOKIE['userdata'],true);
+$presbList = $presb->listPresb($cookie['id']);
+?>
+<br>
+<table>
+    <thead>
+        <th>ID</th>
+        <th>Patient</th>
+        <th>Disease</th>
+        <th>Drug Name</th>
+        <th>Drug Quantity</th>
+        <th>Prescription</th>
+    </thead>
+    <tbody>
+        <?php while($row = $presbList->fetch(PDO::FETCH_ASSOC)) { ?>
+        <tr>
+            <td><?= $row['a_id']?></td>
+            <td><?= $row['firstName'] ?></td>
+            <td><?= $row['disease'] ?></td>
+            <td><?= $row['drug_name'] ?></td>
+            <td><?= $row['drug_quantity'] ?></td>
+            <td><?= $row['prescription'] ?></td>
+        </tr>
+        <?php } ?>
+    </tbody>
+</table>
+<?php } ?>
+<?php 
+if($_SESSION['role']==="doctor")
+{
+    $doctor = new DoctorData();
+    $cookie=json_decode($_COOKIE['userdata'],true);
+    $doctorList = $doctor->profile($cookie['id']);
+?>
+<table>
+    <thead>
+        <th>ID</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Gender</th>
+        <th>Contact</th>
+        <th>Age</th>
+        <th>Address</th>
+        <th>Qualification</th>
+        <th>Email</th>
+        <th>DOB</th>
+        <th>District</th>
+        <th>State</th>
+        <th>Country</th>
+        <th>Pincode</th>
+    </thead>
+    <tbody>
+        <tr>
+            <td><?= $doctorList[0]['d_id'] ?></td>
+            <td><?= $doctorList[0]['firstName'] ?></td>
+            <td><?= $doctorList[0]['lastName'] ?></td>
+            <td><?= $doctorList[0]['gender'] ?></td>
+            <td><?= $doctorList[0]['contact'] ?></td>
+            <td><?= $doctorList[0]['age'] ?></td>
+            <td><?= $doctorList[0]['address'] ?></td>
+            <td><?= $doctorList[0]['qualification'] ?></td>
+            <td><?= $doctorList[0]['email'] ?></td>
+            <td><?= date("d-M-Y",strtotime($doctorList[0]['dob'])) ?></td>
+            <td><?= $doctorList[0]['district'] ?></td>
+            <td><?= $doctorList[0]['state'] ?></td>
+            <td><?= $doctorList[0]['country'] ?></td>
+            <td><?= $doctorList[0]['pincode'] ?></td>
+        </tr>
+    </tbody>
+</table>
+<?php } ?>

@@ -1,4 +1,66 @@
-<h1>Doctor Details</h1>
+<head>
+  <style>
+    fieldset{
+      background-color:#CCC;
+      max-width:900px;
+      padding: 20px;	
+      margin-left: 12%;
+      border: 5px outset black;
+    }
+  </style>
+</head>
+<?php
+if($_SESSION['role']==='admin'){?>
+<nav>
+  <ul>
+    <li><a href="AdminHome">Home</a></li>
+    <li><a>Patient</a>
+      <ul class="dropdown">
+        <li><a href="Patient">Add Patient</a></li>
+        <li><a href="ListPatients">List Patient</a></li>
+      </ul>
+    </li>
+    <li><a>Staff</a>
+      <ul class="dropdown">
+        <li><a href="staff">Add Staff</a></li>
+        <li><a href="ListStaffs">List Staff</a></li>
+      </ul>
+    </li>
+    <li><a>Doctor</a>
+      <ul class="dropdown">
+        <li><a href="Doctor">Add Doctor</a></li>
+        <li><a href="ListDoctors">List Doctor</a></li>
+      </ul>
+    </li>
+    <li class="profile"><a href="profile">My Profile</a></li>
+    <li class="logout"><a href="logout">Logout</a></li> 
+  </ul>
+</nav>
+<?php } ?>
+<?php
+if($_SESSION['role']==='staff'){?>
+<nav>
+  <ul>
+    <li><a href="StaffHome">Home</a></li>
+    <li><a>Patient</a>
+      <ul class="dropdown">
+        <li><a href="Patient">Add Patient</a></li>
+        <li><a href="ListPatients">List Patient</a></li>
+      </ul>
+    </li>
+    <li><a>Doctor</a>
+      <ul class="dropdown">
+        <li><a href="Doctor">Add Doctor</a></li>
+        <li><a href="listDoctor">List Doctor</a></li>
+      </ul>
+    </li>
+    <li class="profile"><a href="profile">My Profile</a></li>
+    <li class="logout"><a href="logout">Logout</a></li>
+  </ul>
+</nav>
+<?php } ?>
+<h2><center>Add Doctor</center></h2>
+<fieldset>
 <form name="doctorLogin" method="POST" action="DoctorPost">
     <p>
         <label for="firstname">Enter first name</label>
@@ -36,24 +98,43 @@
         <input type="password" id="password" name="password">
     </p>
     <p>
-        <label for="address">Enter Address</label>
-        <input type="text" id="address" name="address">
-        <div>
-            <label for="district">District</label>
-            <input type="text" id="district" name="district">
-            <label for="state">State</label>
-            <input type="text" id="state" name="state">
-            <label for="country">Country</label>
-            <input type="text" id="country" name="country">
-            <label for="pincode">Postal code</label>
-            <input type="text" id="pincode" name="pincode">
-        </div>
+      <label for= "address">Enter Address</label>
+      <textarea id="address" name="address" rows="4" cols="30" placeholder="Enter your address here"></textarea>
     </p>
+    <div>
+        <label for="district">District</label>
+        <input type="text" id="district" name="district">
+        <label for="state">State</label>
+        <select id="state" name="state">
+          <option value="Select State">Select State</option> 
+          <?php 
+          $state = new StateData();
+          $result = $state->selectState();
+          while($row = $result->fetch(PDO::FETCH_ASSOC)) {?>
+          <option value=<?php echo $row['state_name']; ?>> <?php echo $row['state_name'];?></option>
+          <?php } ?>
+          ?>
+        </select>
+        <label for="country">Country</label>
+        <select id="country" name="country">
+          <option value="Select Country">Select Country</option>
+          <?php 
+          $country = new CountryData();
+          $result = $country->selectCountry();
+          while($row = $result->fetch(PDO::FETCH_ASSOC)) {?>
+          <option value=<?php echo $row['country_name']; ?>> <?php echo $row['country_name'];?></option>
+          <?php } ?>
+          ?>
+        </select>
+        <label for="pincode">Postal code</label>
+        <input type="text" id="pincode" name="pincode">
+    </div>
     <p>
         <label for="qualification">Enter Qualification</label>
         <input type="text" id="qualification" name="qualification">
     </p>
     <p>
-        <input type="submit" value="addDoctor" name="submit">
+        <input type="submit" value="Save" name="submit">
     </p>
 </form>
+</fieldset>
