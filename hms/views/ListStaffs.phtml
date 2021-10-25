@@ -1,54 +1,97 @@
+<head>
+    <link rel="stylesheet" href="views/css/ListStaff.css">
+</head>
 <?php 
-if($_SESSION['role']==="admin"){
+if ($_SESSION['role']==="admin") {
+  require_once("views/AdminHome.phtml");
+  $staff = new StaffData();
+  $staffList = $staff->listStaff(); 
+  $record_per_page = 5;
+  if(isset($_GET["page"])) {
+      $page = $_GET["page"];
+  } else {
+      $page = 1;
+  }
+  $start_from = ($page-1) * $record_per_page;
+  $staffLimit = $staff->listPerPage($start_from,$record_per_page);
+  //print_r($patientLimit);die;
 ?>
-<nav>
-  <ul>
-    <li><a href="AdminHome">Home</a></li>
-    <li><a>Patient</a>
-      <ul class="dropdown">
-        <li><a href="Patient">Add Patient</a></li>
-        <li><a href="ListPatients">List Patient</a></li>
-      </ul>
-    </li>
-    <li><a>Staff</a>
-      <ul class="dropdown">
-        <li><a href="staff">Add Staff</a></li>
-        <li><a href="ListStaffs">List Staff</a></li>
-      </ul>
-    </li>
-    <li><a>Doctor</a>
-      <ul class="dropdown">
-        <li><a href="Doctor">Add Doctor</a></li>
-        <li><a href="ListDoctors">List Doctor</a></li>
-      </ul>
-    </li>
-    <li class="profile"><a href="profile">My Profile</a></li>
-    <li class="logout"><a href="logout">Logout</a></li>
-  </ul>
-</nav>
+<div class="searchBox">
+    <form action="ListStaffs" method="GET">
+        <input type="text" id="search" name="search" placeholder="&#128269 Search by name">
+        <input type="submit" name="submit" value="Search">
+    </form>
+</div>
 <?php
-$staff = new StaffData();
-?>
-<?php $staffList = $staff->listStaff(); ?>
-<div><br>
-    <table>
-        <thead>
+if(isset($_GET['search'])) {
+    $search = $_GET['search'];
+    $staffName = new StaffData();
+    $SearchStaffName = $staffName->SearchStaffName($search);
+    if($SearchStaffName->rowCount() === 0) {
+        $this->messageManager->addErrorMessage("Record Not Found");
+        $this->redirect('ListStaffs');
+    }
+    if($SearchStaffName->rowCount() > 0) { ?>
+    <div>
+        <table>
+            <thead>
             <th>ID</th>
-            <th>Staff Name</th>
+            <th>Name</th>
             <th>Email</th>
             <th>Actions</th>
         </thead>
         <tbody>
-            <?php while ($row = $staffList->fetch(PDO::FETCH_ASSOC)) {
+            <?php while ($row = $SearchStaffName->fetch(PDO::FETCH_ASSOC)) {
                 ?>
                 <tr>
                     <td><?= $row['staff_id']?></td>
                     <td><?= $row['name'] ?></td>
                     <td><?= $row['email'] ?></td>
-                    <td><button><a href="updateStaff?staff_id=<?= $row['staff_id']?>">Edit</a></button></td>
+                    <td><button><a href="staff?staff_id=<?= $row['staff_id']?>">Edit</a></button></td>
+                </tr>
+            <?php } ?>
+        </tbody>
+    </table>
+        </table>
+    </div>
+<?php } 
+} else { ?>
+<div><br>
+    <table>
+        <thead>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Actions</th>
+        </thead>
+        <tbody>
+            <?php while ($row = $staffLimit->fetch(PDO::FETCH_ASSOC)) {
+                ?>
+                <tr>
+                    <td><?= $row['staff_id']?></td>
+                    <td><?= $row['name'] ?></td>
+                    <td><?= $row['email'] ?></td>
+                    <td><button><a href="staff?staff_id=<?= $row['staff_id']?>">Edit</a></button></td>
                 </tr>
             <?php } ?>
         </tbody>
     </table>
 </div>
+<div class="pagination">
+    <?php 
+        $total_records = $staff->countRecords();
+        $total_pages = ceil($total_records/$record_per_page);
+        $pageLink = "";
+        for ($i=1; $i<=$total_pages; $i++) {   
+            if ($i == $page) {   
+                $pageLink .= "<a class='active' href='ListStaffs?page=".$i."'>".$i."</a>";   
+            }               
+            else  {   
+                $pageLink .= "<a href='ListStaffs?page=".$i."'>".$i."</a>";     
+            }   
+        };
+        echo $pageLink;       
+    ?>
+</div>
+<?php } ?>
 <?php } ?>

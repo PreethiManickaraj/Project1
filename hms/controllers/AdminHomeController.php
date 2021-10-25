@@ -11,10 +11,7 @@ class AdminHomeController extends Controller
      */
     public function process($postParams)
     {
-        $this->head = array(
-            'title'=>'Admin',
-            'description'=>'Admin  Home Page'
-        );
+        $this->head = ['title'=>'Admin','description'=>'Admin  Home Page'];
         $this->view = 'AdminHome';
     }
 }

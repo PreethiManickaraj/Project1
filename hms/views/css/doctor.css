@@ -1,0 +1,99 @@
+fieldset {
+  background: linear-gradient(grey,lightgrey);
+  margin-left: 10%;
+  border: 2px outset black;
+  border-radius: 8px;
+  margin-bottom: 5%;
+  margin-right: 10%;
+  padding: 4px;
+}
+input[type=submit] {
+  background: linear-gradient(rgb(30, 117, 30),rgb(22, 77, 22),rgb(30, 117, 30));
+  border: 2px solid black;
+  border-radius: 2px;
+  font-weight: bold;
+  font-size: 15px;
+  padding: 10px 18px; 
+  margin-left: 35%;
+  color: white;
+}
+label {
+  margin-left: 15%;
+}
+input,textarea,select {
+  margin-left: 55%;
+  padding: 5px 32px;
+}
+#firstname {
+  margin-left: 161px;
+}
+#lastname {
+  margin-left: 163px;
+}
+#gender {
+  margin-left: 2%;
+}
+#male {
+  margin-left: 188px;
+}
+#female {
+  margin-left: 188px;
+}
+#dob {
+  margin-left: 143px;
+  padding: 5px 42px;
+}
+#age {
+  margin-left: 215px;
+}
+#email {
+  margin-left: 132px;
+}
+#contact {
+  margin-left: 114px;
+}
+#password {
+  margin-left: 170px;
+}
+#address {
+  margin-left: 179px;
+  padding: 5px 5px;
+}
+#country {
+  margin-left: 180px;
+  padding: 5px 64px;
+}
+#state {
+  margin-left: 204px;
+  padding: 5px 74px;
+}
+#district {
+  margin-left: 184px;
+  padding: 5px 34px;
+}
+#pincode {
+  margin-left: 151px;
+  padding: 5px 34px;
+}
+a {
+  text-decoration: none;
+}
+#qualification {
+  margin-left: 140px;
+  padding: 5px 34px;
+}
+#specialist {
+  margin-left: 167px;
+  padding: 5px 70px;
+}
+#from_time {
+  margin-left: 156px;
+  padding: 5px 90px;
+}
+#to_time {
+  margin-left: 177px;
+  padding: 5px 90px;
+}
+#status {
+  margin-left: 191px;
+}

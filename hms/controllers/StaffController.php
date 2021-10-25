@@ -11,10 +11,7 @@ class StaffController extends Controller
      */
     public function process($postParams)
     {
-        $this->head = array(
-            'title'=>'Staff',
-            'description'=>'Staff Page'
-        );
+        $this->head = ['title'=>'Staff','description'=>'Staff Page'];
         $this->view = 'staff';
     }
 }

@@ -19,10 +19,7 @@ class LogoutController extends Controller
      */
     public function process($params)
     {
-        $this->head = array(
-            'title'=>'Logout',
-            'description'=>'Logout Page'
-        );
+        $this->head = ['title'=>'Logout','description'=>'Logout Page'];
         $this->cookieData->unsetData();
         $this->redirect("login");
     }

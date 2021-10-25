@@ -15,17 +15,29 @@ class CountryData
      */
     public function __construct()
     {
-        $dbConnect =  new dbConnect();;
+        $dbConnect = new dbConnect();;
         $this->dbConnect = $dbConnect->connect();
     }
     /**
      *  Method for selecting all the countries name from table.
-     *  @var string $table has the country table
-     *  @return array return all countries from country table.
+     *  @return pdo return all countries from country table.
      */
     public function selectCountry()
     {
         $table = self::TABLE_NAME;
-        return $this->dbConnect->query("SELECT * FROM $table ORDER BY id asc");
+        return $this->dbConnect->query("SELECT * FROM $table ORDER BY country_id asc");
+    }
+    /**
+     *  Method for selecting country by name from table.
+     *  @param int $id is the country id.
+     *  @return string return country_name from country table.
+     */
+    public function SelectCountryName($id)
+    {
+        $table = self::TABLE_NAME;
+        $stmt = $this->dbConnect->prepare("SELECT country_name FROM $table WHERE country_id = ?");
+        $stmt->execute([$id]);
+        $record = $stmt->fetch();
+        return $record['country_name'];
     }
 }

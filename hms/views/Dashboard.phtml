@@ -1,0 +1,36 @@
+<head>
+    <link rel="stylesheet" href="views/css/profile1.css">
+</head>
+<?php 
+if ($_SESSION['role']==="admin") {
+  require_once("views/AdminHome.phtml");
+} 
+?>
+<?php 
+if ($_SESSION['role']==="staff") {
+  require_once("views/StaffHome.phtml");
+} 
+?>
+<?php 
+if ($_SESSION['role']==="doctor") {
+  require_once("views/DoctorHome.phtml");
+} 
+$doctor = new DoctorData();
+$patient = new PatientData();
+$countPatient = $patient->countRecords();
+$countDoctor = $doctor->countRecords();
+?>
+<div>
+    <table>
+        <thead>
+            <tr>
+                <th>No Of Patients</th>
+                <td><?= $countPatient?></td>
+            </tr>
+            <tr>
+                <th>No Of Doctors</th>
+                <td><?= $countDoctor?></td>
+            </tr> 
+        </thead>
+    </table>
+</div>

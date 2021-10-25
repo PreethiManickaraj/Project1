@@ -1,47 +1,23 @@
 <head>
+    <link rel="stylesheet" href="views/css/login.css">
     <style>
         body{
-            background: linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),url("../views/css/images/login.jpg");
+            background: linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)),url("views/css/images/login.jpg");
             background-repeat:no-repeat;
             background-attachment: fixed;
             background-size: cover;
         }
-        h2{
-            color:black;
-        }
-        .login{
-            background: linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6),lavender);
-        }
-        label {
-            color:white;
-        }
-        #email{  
-            width: 300px;  
-            height: 30px;  
-            border: none;  
-            border-radius: 3px;  
-            padding-left: 8px;  
-        }  
-        #password{  
-            width: 300px;  
-            height: 30px;  
-            border: none;  
-            border-radius: 3px;  
-            padding-left: 8px;  
-        }  
     </style>
 </head>
-<h2>Login </h2>
 <div class="login">
-<fieldset>
-<form name="login" method="POST" action="LoginPost">
+<form name="login" method="POST" action="LoginPost" onsubmit="return loginValidation('login')">
     <p>
-        <label for="email">Enter Email Id</label><br><br>
-        <input type="text" id="email" name="email">
+        <label for="email">Email address</label><br><br>
+        <input type="text" id="email" name="email" placeholder="Enter email address" required>
     </p>
     <p>
-        <label for="password">Enter Password</label><br><br>
-        <input type="password" id="password" name="password">
+        <label for="password">Password</label><br><br>
+        <input type="password" id="password" name="password" placeholder="  Enter password" required>
     </p>
     <p>
         <label for="role">Select role</label>
@@ -53,8 +29,7 @@
         </select>
     </p>
     <p>
-        <input type="submit" value="Login" name="Login" id="log">
+        <input type="submit" value="Login" name="Login" id="log" class="button">
     </p>
 </form>
-</fieldset>
 </div>

@@ -20,16 +20,14 @@ class Validator
     /**
      *  Method for processing the data.
      *  This method checks that the field is empty or not
-     *  validates the fields and field type.
      *  @param array $postParams has the post data values given in the form.
-     *  @var string $fieldvalue has the field value.
      *  @return array returns the errors array.
      */
     public function process($postParams)
     {
-        foreach($this->fields as $field => $fieldType){
+        foreach ($this->fields as $field => $fieldType) {
             $fieldValue = '';
-            if(!($fieldValue = $this->isEmpty($field, $postParams))) {
+            if (!($fieldValue = $this->isEmpty($field, $postParams))) {
                 $this->errors[] = sprintf('%s is a required field.', ucwords($field));
             } else {
                 $this->validateField( $field, $fieldType, $fieldValue);
@@ -45,7 +43,7 @@ class Validator
      */
     public function validateField($field, $type, $value) 
     {   
-        if($type === 'email' && !$this->isEmail($value)) {
+        if ($type === 'email' && !$this->isEmail($value)) {
             $this->errors[] = sprintf('%s requires valid email id.', ucwords($field));
         }
     }

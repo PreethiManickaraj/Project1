@@ -12,7 +12,6 @@ class StaffPostController extends Controller
     protected $fields = [
         'StaffName'=> 'text',
         'email' => 'email',
-        'password' => 'string'
     ];
     protected $validator;
     protected $staffData;
@@ -38,20 +37,25 @@ class StaffPostController extends Controller
     public function process($params)
     {
         $postData = $_POST;
+        $details = [
+            'id' => $postData['staff_id'],
+            'name' => $postData['StaffName'],
+            'email' => $postData['email'],
+            'password' => md5($postData['password'])
+        ];
         $errors = $this->validator->process($postData);
-        if($errors) {
+        if ($errors) {
             $this->messageManager->addErrorMessage(implode(' </br>', $errors));
-            return $this->redirect('staff');
+            return $this->redirect('Staff');
         }
-        $success = false;
+        $success = false; 
         try {
-            switch($postData['submit'])
-            {
+            switch ($postData['submit']) {
                 case 'Save':
-                    $this->staffData->addStaff($postData['StaffName'],$postData['email'],md5($postData['password']));
+                    $this->staffData->addStaff($details);
                     break;
                 case 'Update':
-                    $this->staffData->updateStaff($postData['StaffName'],$postData['email'],md5($postData['password']));
+                    $this->staffData->updateStaff($details);
                     break;
             }
             $success = true;
@@ -60,13 +64,13 @@ class StaffPostController extends Controller
         } catch (\Exception $e) {
             $this->messageManager->addErrorMessage('Unable to add the staff');
         } 
-        if($success) {
-            if($postData['submit']==='Save') {
-                $this->messageManager->addSuccessMessage('Staff Added Successfully!!!');
+        if ($success) {
+            if ($postData['submit'] === 'Save') {
+                $this->messageManager->addSuccessMessage('Staff Added Successfully..');
                 $this->redirect('Staff');
             }
-            if($postData['submit']==='Update') {
-                $this->messageManager->addSuccessMessage('Staff Updated...');
+            if ($postData['submit'] === 'Update') {
+                $this->messageManager->addSuccessMessage('Staff details updated...');
                 $this->redirect('Staff');
             }
         }

@@ -1,0 +1,66 @@
+<head>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="views/css/appointment.css">
+  <script type="text/javascript" src="views/js/AppointmentValidation.js"></script>
+</head>
+<?php 
+require_once("views/StaffHome.phtml");
+if (isset($_GET['p_id'])) {
+  $id = $_GET['p_id'];
+  $doctorFromTime = 0;
+  $doctorToTime = 0;
+  $date = date("Y-m-d");
+}  
+?>
+<form name="app" method="POST" action="AppointmentPost" >
+    <fieldset>
+        <center><legend>Appointment</legend></center>
+        <p>
+            <input type="hidden" id="p_id" name="p_id" value = "<?php echo $id ?>">
+        </p>
+        <div class="form-group row">
+            <label for="doctor_id">Doctor</label>
+            <div class="col-sm-4">
+                <select id="doctor_id" name="doctor_id">
+                    <option value="Select">Select</option>
+                    <?php 
+                        $doctor = new DoctorData();
+                        $result = $doctor->listDoctors();
+                        while($row = $result->fetch(PDO::FETCH_ASSOC)) {
+                            if($row['status'] == 1) {
+                                $doctorFromTime = $row['from_time'];
+                                $doctorToTime = $row['to_time']?> 
+                                <option value = <?php echo $row['d_id']; ?>> <?php echo $row['firstname'];?></option>
+                            <?php } ?>
+                    <?php } ?>
+                </select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="appointment_date">Appointment Date</label>
+            <div class="col-sm-4">
+                <input type="date" id="appointment_date" name="appointment_date" min=<?= $date ?> required>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="app_from_time">From Time</label>
+            <div class="col-sm-4">
+                <input type="time" id="app_from_time" name="app_from_time"  min=<?= $doctorFromTime?>  required>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="app_to_time">To Time</label>
+            <div class="col-sm-4">
+                <input type="time" id="app_to_time" name="app_to_time" max=<?= $doctorToTime?>  required>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="offset-sm-2 col-sm-10">
+                <input type = "submit" value = "Save" name = "submit">
+            </div>
+        </div>
+        <div>
+            <center><span id="error"></span></center>
+        </div>
+    </fieldset>
+</form>

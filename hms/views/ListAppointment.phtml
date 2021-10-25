@@ -1,0 +1,43 @@
+<head>
+    <link rel="stylesheet" href="views/css/prescription.css">
+</head>
+<?php 
+if ($_SESSION['role']==="doctor") {
+  require_once("views/DoctorHome.phtml");
+} 
+?>
+<?php 
+$appointment = new AppointmentData;
+$cookie = json_decode($_COOKIE['userdata'],true);
+$result = $appointment->selectAppointment($cookie['id']);
+?>
+<div style="overflow-x:auto;">
+    <table>
+        <thead>
+            <th>ID</th>
+            <th>Patient Name</th>
+            <th>Appointment Date</th>
+            <th>From Time</th>
+            <th>To Time</th>
+            <th>Status</th>
+            <th>Action</th>
+        </thead>
+        <tbody>
+          <?php while ($row = $result->fetch(PDO::FETCH_ASSOC)) { ?>
+          <tr>
+            <td><?= $row['appointment_id']?></td>
+            <td><?php
+                $patient = new PatientData();
+                $firstname = $patient->selectName($row['patient_id']);
+                echo $firstname ?>
+            </td>
+            <td><?= $row['appointment_date']?></td>
+            <td><?= $row['appointment_from_time']?></td>
+            <td><?= $row['appointment_to_time']?></td>
+            <td><?= $row['status']?></td>
+            <td><button><a href="addPresb?p_id=<?= $row['patient_id']?>">Add Presb</a></button></td>
+          </tr>
+          <?php } ?>
+        </tbody>
+    </table>
+</div>

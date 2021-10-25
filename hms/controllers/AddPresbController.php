@@ -11,10 +11,7 @@ class AddPresbController extends Controller
      */
     public function process($postParams)
     {
-        $this->head = array(
-            'title'=>'Add Prescription',
-            'description'=>'Adding Prescription details'
-        );
+        $this->head = ['title'=>'Add Prescription','description'=>'Adding Prescription details'];
         $this->view = 'AddPresb';
     }
 }

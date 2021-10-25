@@ -1,96 +1,77 @@
 <head>
-  <style>
-    fieldset{
-      background-color:#CCC;
-      max-width:900px;
-      padding: 20px;	
-      margin-left: 12%;
-      border: 5px outset black;
-    }
-  </style>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="views/css/staffs.css">
 </head>
 <?php 
-if($_SESSION['role']==="admin"){
+if ($_SESSION['role'] === "admin") {
+  require_once("views/AdminHome.phtml");
+} 
+if ($_SESSION['role'] === "staff") {
+  require_once("views/StaffHome.phtml");
+}
+
+if (isset($_GET['staff_id'])) {
+  $id = $_GET['staff_id'];
+  $update = true;
+  $staff = new StaffData();
+  $result = $staff->viewStaff($id);
+} else {
+  $id = 0;
+  $update = false;
+}
 ?>
-<nav>
-  <ul>
-    <li><a href="AdminHome">Home</a></li>
-    <li><a>Patient</a>
-      <ul class="dropdown">
-        <li><a href="Patient">Add Patient</a></li>
-        <li><a href="ListPatients">List Patient</a></li>
-      </ul>
-    </li>
-    <li><a>Staff</a>
-      <ul class="dropdown">
-        <li><a href="staff">Add Staff</a></li>
-        <li><a href="ListStaffs">List Staff</a></li>
-      </ul>
-    </li>
-    <li><a>Doctor</a>
-      <ul class="dropdown">
-        <li><a href="Doctor">Add Doctor</a></li>
-        <li><a href="ListDoctors">List Doctor</a></li>
-      </ul>
-    </li>
-    <li class="profile"><a href="profile">My Profile</a></li>
-    <li class="logout"><a href="logout">Logout</a></li> 
-  </ul>
-</nav>
-<?php } ?>
-<?php 
-if($_SESSION['role']==="staff"){ ?>
-<nav>
-  <ul>
-    <li><a href="StaffHome">Home</a></li>
-    <li><a>Patient</a>
-      <ul class="dropdown">
-        <li><a href="Patient">Add Patient</a></li>
-        <li><a href="ListPatients">List Patient</a></li>
-        <li><a href="ViewPatients">View Patient</a></li>
-      </ul>
-    </li>
-    <li><a>Users</a>
-      <ul class="dropdown">
-        <li><a href="staff">Add Staff</a></li>
-      </ul>
-    </li>
-    <li><a>Doctor</a>
-      <ul class="dropdown">
-        <li><a href="Doctor">Add Doctor</a></li>
-        <li><a href="listDoctor">List Doctor</a></li>
-      </ul>
-    </li>
-    <li class="profile"><a>My Profile</a>
-      <ul class="dropdown">
-        <li><a href="profile">Menu</a></li>
-      </ul>
-    </li>
-    <li class="logout"><a>Logout</a>
-      <ul class="dropdown">
-        <li  style="text-align:center";><span><a href="logout">Logout <?php echo $_COOKIE['staffname'] ?></a></span></li>
-      </ul>
-    </li>
-  </ul>
-</nav>
-<?php } ?>
-<h1><center>Add Staff</center></h1>
-<form name="staffLogin" method="POST" action="StaffPost">
-  <fieldset>
-    <p>
-        <label for="StaffName">Enter name</label>
-        <input type="text" id="StaffName" name="StaffName">
-    </p>
-    <p>
-        <label for="email">Enter email</label>
-        <input type="email" id="email" name="email">
-    </p>
-    <p>
-        <label for="password">Enter Password</label>
-        <input type="password" id="password" name="password">
-    </p>
-    <p>
-        <input type="submit" value="Save" name="submit">
-    </p>
-  </fieldset>
-</form>
+<div class="container">
+  <form name="staffLogin" method="POST" action="StaffPost" onsubmit="return validation('staffLogin')" autocomplete="on">
+    <fieldset>
+      <?php if($update === true): ?>
+        <center><legend>Update Staff</legend></center>
+      <?php else: ?>
+        <center><legend>Add Staff</legend></center>
+      <?php endif ?>
+      <p>
+        <?php if($update===true): ?>
+          <input type="hidden" id="staff_id" name="staff_id" value="<?php echo $id; ?>">
+        <?php endif ?>
+      </p>
+      <div class="form-group row">
+        <label for="StaffName">Name</label>
+        <div class="col-sm-4">
+          <input type="text" id="StaffName" name="StaffName" placeholder="Enter your name"
+          <?php if($update === true): ?>
+            value="<?php echo $result['name']?>" 
+          <?php else: ?>
+            value="" 
+          <?php endif ?> required>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="email">Email Address</label>
+        <div class="col-sm-4">
+          <input type="email" id="email" name="email" placeholder="Enter email address" 
+          <?php if($update === true): ?>
+            value="<?php echo $result['email']?>" 
+          <?php else: ?>
+            value="" 
+          <?php endif ?> required>
+        </div>
+      </div>
+      <?php if($update === false) { ?>
+        <div class="form-group row"> 
+          <label for="password">Password</label>
+          <div class="col-sm-4">
+            <input type="password" id="password" name="password" placeholder="Enter password" required>
+          </div>
+        </div>
+      <?php } ?>
+      <div class="form-group row">
+        <div class="offset-sm-2 col-sm-10">
+          <?php if($update===true): ?>
+            <input type="submit" value="Update" name="submit">
+          <?php else: ?>
+            <input type="submit" id="Save" value="Save" name="submit">
+          <?php endif ?>
+        </div>
+      </div>
+    </fieldset>
+  </form>
+</div>

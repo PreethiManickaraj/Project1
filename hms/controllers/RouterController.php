@@ -41,20 +41,33 @@ class RouterController extends Controller
 	 */
 	public function process($params)
 	{
+
 		$parsedUrl = $this->parseUrl($params[0]);
-		if(empty($parsedUrl[0])) {
+		if (empty($parsedUrl[0])) {
 			$controllerClass = 'HomeController';
 		} else {	
 			$controllerClass = $this->dashesToCamel(array_shift($parsedUrl)) . 'Controller';
 		}
-		if(file_exists('controllers/' . $controllerClass . '.php')) {
+		if (file_exists('controllers/' . $controllerClass . '.php')) {
 			$this->controller = new $controllerClass;
-		}
-		else {
+		} else {
 			$this->redirect('error');
 		}
 		$this->controller->process($parsedUrl);
 		$this->view = 'layout';
 		$this->head  = $this->controller->head;
+	}
+
+	public function isAjax()
+	{
+		$postAjax = $_POST['is_ajax'] ?? '';
+		$getAjax = $_GET['is_ajax'] ?? '';
+		return ($postAjax || $getAjax);
+	}
+	public function isReport()
+	{
+		$postReport = $_POST['is_report'] ?? '';
+		$getReport = $_GET['is_report'] ?? '';
+		return ($postReport || $getReport);
 	}
 }

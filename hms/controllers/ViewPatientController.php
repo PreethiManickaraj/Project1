@@ -11,10 +11,7 @@ class ViewPatientController extends Controller
      */
     public function process($postParams)
     {
-        $this->head = array(
-            'title'=>'View Patient',
-            'description'=>'View Patient details'
-        );
+        $this->head = ['title'=>'View Patient','description'=>'View Patient details'];
         $this->view = 'ViewPatient';
     }
 }

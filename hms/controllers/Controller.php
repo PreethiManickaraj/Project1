@@ -12,7 +12,7 @@ abstract class Controller
 {
     protected $data = [];
     protected $view = "";
-	protected $head = array('title' => '', 'description' => '');
+	protected $head = ['title' => '', 'description' => ''];
     protected $messageManager;
     protected $messages = [];
     /**

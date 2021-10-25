@@ -1,265 +1,262 @@
 <head>
-    <style>
-        table {
-        font-family: Arial, Helvetica, sans-serif;
-        border-collapse: collapse;
-        width: 100%;
-        }
-
-        table td, table th {
-        border: 1px solid #ddd;
-        padding: 8px;
-        }
-
-        table tr:nth-child(even){background-color: #f2f2f2;}
-
-        table tr:hover {background-color: #ddd;}
-
-        table th {
-        padding-top: 12px;
-        padding-bottom: 12px;
-        text-align: left;
-        background-color: lavender;
-        color: black;
-        }
-    </style>
+    <link rel="stylesheet" href="views/css/profile1.css">
+    <script type="text/javascript" src="views/js/showImage.js"></script>
 </head>
-<h1><center>User Profile</center></h1>
 <?php 
-if($_SESSION['role']==='admin'){
-?>
-<nav>
-  <ul>
-    <li><a href="AdminHome">Home</a></li>
-    <li><a>Patient</a>
-      <ul class="dropdown">
-        <li><a href="Patient">Add Patient</a></li>
-        <li><a href="ListPatients">List Patient</a></li>
-      </ul>
-    </li>
-    <li><a>Staff</a>
-      <ul class="dropdown">
-        <li><a href="staff">Add Staff</a></li>
-        <li><a href="ListStaffs">List Staff</a></li>
-      </ul>
-    </li>
-    <li><a>Doctor</a>
-      <ul class="dropdown">
-        <li><a href="Doctor">Add Doctor</a></li>
-        <li><a href="ListDoctors">List Doctor</a></li>
-      </ul>
-    </li>
-    <li class="profile"><a href="profile">My Profile</a></li>
-    <li class="logout"><a href="logout">Logout</a></li>
-  </ul>
-</nav>
-<?php } ?>
-<?php 
-if($_SESSION['role']==='staff'){
-?>
-<nav>
-  <ul>
-    <li><a href="StaffHome">Home</a></li>
-    <li><a>Patient</a>
-      <ul class="dropdown">
-        <li><a href="Patient">Add Patient</a></li>
-        <li><a href="ListPatients">List Patient</a></li>
-      </ul>
-    </li>
-    <li><a>Doctor</a>
-      <ul class="dropdown">
-        <li><a href="Doctor">Add Doctor</a></li>
-        <li><a href="ListDoctors">List Doctor</a></li>
-      </ul>
-    </li>
-    <li class="profile"><a href="profile">My Profile</a></li>
-    <li class="logout"><a href="logout">Logout</a></li>
-  </ul>
-</nav>
-<?php } ?>
-<?php 
-if($_SESSION['role']==="patient"){
-?>
-<nav>
-  <ul>
-    <li><a href="PatientHome">Home</a></li>
-    <li class="profile"><a href="profile">My Profile</a></li>
-    <li class="logout"><a href="logout">Logout</a></li>
-  </ul>
-</nav>
-<?php } ?>
-<?php 
-if($_SESSION['role']==='doctor'){
-?>
-<nav>
-  <ul>
-    <li><a href="DoctorHome">Home</a></li>
-    <li><a>Doctor</a>
-      <ul class="dropdown">
-        <li><a href="ListPatients">List Patients</a></li>
-      </ul>
-    </li>
-    <li class="profile"><a href="profile">My Profile</a></li>
-    <li class="logout"><a href="logout">Logout</a></li>
-  </ul>
-</nav>
-<?php } ?>
-<?php 
-if($_SESSION['role']==="admin")
-{
+if ($_SESSION['role'] === 'admin') {
+  require_once("views/AdminHome.phtml");
+} 
+if ($_SESSION['role'] === 'staff') {
+  require_once("views/StaffHome.phtml");
+} 
+if ($_SESSION['role'] === "patient") {
+  require_once("views/PatientHome.phtml");
+} 
+if ($_SESSION['role']==='doctor') {
+  require_once("views/DoctorHome.phtml");
+} 
+if ($_SESSION['role'] === "admin") {
     $admin = new AdminData();
     $adminDetails = $admin->profile();
+    $cookie = json_decode($_COOKIE['userdata'],true);
+    $adminDetail = $adminDetails[0];
+    $images = new ImageData();
+    $admin_image = $images->selectImage($cookie['id']);
 ?>
+<center><h1>Admin Profile</h1></center>
 <table>
     <thead>
-        <th>Username</th>
-        <th>User Id</th>
-        <th>Email</th>
-        <th>role</th>
-    </thead>
-    <tbody>
         <tr>
-            <td><?= $adminDetails[0]['role']?></td>
-            <td><?= $adminDetails[0]['user_id']?></td>
-            <td><?= $adminDetails[0]['email']?></td>
-            <td><?= $adminDetails[0]['role']?></td>
+            <th>Profile Image</th>
+            <td><?php 
+                $images = new ImageData();
+                $admin_image = $images->selectImage($cookie['id']);
+                if($admin_image == "") {
+                    echo "<img src=views/DefaultProfile/profile.png width='150' height='150'>";
+                } else {
+                    echo "<img src=views/AdminImageUploads/".$admin_image." width='150' height='150'>";
+                }
+                ?>
+            </td>
+        </tr> 
+        <tr>
+            <th>User Name</th>
+            <td><?= $adminDetail['role']?></td>
+        </tr>  
+        <tr>
+            <th>User Email</th>
+            <td><?= $adminDetail['email']?></td><br>
         </tr>
-    </tbody>
+        <tr>
+            <th>Change Password</th>
+            <td>
+                <form name="Password" action="ChangePassword?user_id=<?= $cookie['id']?>" method="POST">
+                    <input type="submit" name="submit" value="Change Password" id="updatePass">
+                </form>
+            </td>
+        </tr>
+        <tr>
+            <th>Change Profile Photo</th>
+            <td>
+                <form name="image_upload" action="ProfilePost" method="POST" enctype="multipart/form-data" onsubmit="return fileUploads();">
+                    <input type="file" name="admin_image" id="myfile">
+                    <input type="submit" name="submit" value="Upload" id="upload">
+                </form>
+                <p id="status"></p>
+                <script type="text/javascript" src="views/js/fileUploads.js"></script>
+            </td>
+        </tr> 
+    </thead>
 </table>
 <?php } ?>
 <?php 
-if($_SESSION['role']==="staff")
-{
+if ($_SESSION['role'] === "staff") {
     $staff = new StaffData();
-    $cookie=json_decode($_COOKIE['userdata'],true);
+    $cookie = json_decode($_COOKIE['userdata'],true);
     $staffDetails = $staff->profile($cookie['id']);
+    $staffDetail = $staffDetails[0];
 ?>
+<center><h1>Staff Profile</h1></center>
 <table>
-    <thead>
-        <th>Staff Id</th>
-        <th>Name</th>
-        <th>Email</th>
-    </thead>
-    <tbody>
+    <thead> 
         <tr>
-            <td><?= $cookie['id']?></td>
-            <td><?= $staffDetails[0]['name']?></td>
-            <td><?= $staffDetails[0]['email']?></td>
+            <th>Profile Image</th>
+            <td><?php 
+                $images = new ImageData();
+                $staff_image = $images->selectStaffImage($cookie['id']);
+                if($staff_image == "") {
+                    echo "<img src=views/DefaultProfile/profile.png width='150' height='150'>";
+                } else {
+                    echo "<img src=views/StaffImageUploads/".$staff_image." width='150' height='150'>";
+                }
+                ?>
+            </td>
         </tr>
-    </tbody>
+        <tr>
+            <th>User Name</th>
+            <td><?= $staffDetail['name']?></td>
+        </tr>  
+        <tr>
+            <th>User Email</th>
+            <td><?= $staffDetail['email']?></td> 
+        </tr>
+        <tr>
+            <th>Role</th>
+            <td><?= $_SESSION['role']?></td> 
+        </tr> 
+        <tr>
+            <th>Change Password</th>
+            <td>
+                <form name="Password" action="ChangePassword?user_id=<?= $cookie['id']?>" method="POST">
+                    <input type="submit" name="submit" value="Change Password" id="updatePass">
+                </form>
+            </td>
+        </tr>
+        <tr>
+            <th>Change Profile Photo</th>
+            <td>
+                <form id="image_upload" action="StaffProfilePost" name="image_upload" method="POST" enctype="multipart/form-data" onsubmit="return staffFileUploads();">
+                    <input type="file" name="staff_image" id="myfile">
+                    <input type="submit" name="submit" value="Upload" id="upload">
+                </form>
+                <p id="status"></p>
+                <script type="text/javascript" src="views/js/staffFileUploads.js"></script>
+            </td>
+        </tr>
+    </thead>
 </table>
 <?php } ?>
 <?php 
-if($_SESSION['role']==="patient")
-{
+if ($_SESSION['role'] === "patient") {
     $patient = new PatientData();
-    $cookie=json_decode($_COOKIE['userdata'],true);
+    $cookie = json_decode($_COOKIE['userdata'],true);
     $patientDetails = $patient->profile($cookie['id']);
+    $patientDetail = $patientDetails[0];
 ?>
+<center><h1>Patient Profile</h1></center>
 <table>
     <thead>
-        <th>ID</th>
-        <th>First Name</th>
-        <th>Last Name</th>
-        <th>Gender</th>
-        <th>Contact</th>
-        <th>Age</th>
-        <th>Address</th>
-        <th>Email</th>
-        <th>DOB</th>
-        <th>District</th>
-        <th>State</th>
-        <th>Country</th>
-        <th>Pincode</th>
-    </thead>
-    <tbody>
         <tr>
-            <td><?= $patientDetails[0]['p_id'] ?></td>
-            <td><?= $patientDetails[0]['firstName'] ?></td>
-            <td><?= $patientDetails[0]['lastName'] ?></td>
-            <td><?= $patientDetails[0]['gender'] ?></td>
-            <td><?= $patientDetails[0]['contact'] ?></td>
-            <td><?= $patientDetails[0]['age'] ?></td>
-            <td><?= $patientDetails[0]['address'] ?></td>
-            <td><?= $patientDetails[0]['email'] ?></td>
-            <td><?= date("d-M-Y",strtotime($patientDetails[0]['dob'])) ?></td>
-            <td><?= $patientDetails[0]['district'] ?></td>
-            <td><?= $patientDetails[0]['state'] ?></td>
-            <td><?= $patientDetails[0]['country'] ?></td>
-            <td><?= $patientDetails[0]['pincode'] ?></td>
+            <th>Profile Image</th>
+            <td><?php 
+                $images = new ImageData();
+                $patient_image = $images->selectPatientImage($cookie['id']);
+                if($patient_image == "") {
+                    echo "<img src=views/DefaultProfile/profile.png width='150' height='150'>";
+                } else {
+                    echo "<img src=views/PatientImageUploads/".$patient_image." width='150' height='150'>";
+                }
+                ?>
+            </td>
         </tr>
-    </tbody>
-</table>
-<?php 
-$presb = new AppointmentData();
-$cookie=json_decode($_COOKIE['userdata'],true);
-$presbList = $presb->listPresb($cookie['id']);
-?>
-<br>
-<table>
-    <thead>
-        <th>ID</th>
-        <th>Patient</th>
-        <th>Disease</th>
-        <th>Drug Name</th>
-        <th>Drug Quantity</th>
-        <th>Prescription</th>
-    </thead>
-    <tbody>
-        <?php while($row = $presbList->fetch(PDO::FETCH_ASSOC)) { ?>
         <tr>
-            <td><?= $row['a_id']?></td>
-            <td><?= $row['firstName'] ?></td>
-            <td><?= $row['disease'] ?></td>
-            <td><?= $row['drug_name'] ?></td>
-            <td><?= $row['drug_quantity'] ?></td>
-            <td><?= $row['prescription'] ?></td>
+            <th>User Name</th>
+            <td><?= $patientDetail['firstname']?></td>
+        </tr>  
+        <tr>
+            <th>User Email</th>
+            <td><?= $patientDetail['email']?></td> 
+        </tr> 
+        <tr>
+            <th>Gender</th>
+            <td><?= $patientDetail['gender']?></td><br>
         </tr>
-        <?php } ?>
-    </tbody>
+        <tr>
+            <th>Age</th>
+            <td><?= $patientDetail['age']?></td>
+        </tr>
+        <tr>
+            <th>DOB</th>
+            <td><?= date("d-M-Y",strtotime($patientDetail['dob'])) ?></td><br>
+        </tr>
+        <tr>
+            <th>Change Password</th>
+            <td>
+                <form name="Password" action="ChangePassword?user_id=<?= $cookie['id']?>" method="POST">
+                    <input type="submit" name="submit" value="Change Password" id="updatePass">
+                </form>
+            </td>
+        </tr>
+        <tr>
+            <th>Change Profile Photo</th>
+            <td>
+                <form name="image_upload" action="PatientProfilePost" method="POST" enctype="multipart/form-data" onsubmit="return patientFileUpload();">
+                    <input type="file" name="patient_image" id="myfile">
+                    <input type="submit" name="submit" value="Upload" id="upload">
+                </form>
+                <p id="status"></p>
+                <script type="text/javascript" src="views/js/patientFileUpload.js"></script>
+            </td>
+        </tr>
+    </thead>
 </table>
 <?php } ?>
 <?php 
-if($_SESSION['role']==="doctor")
-{
+if ($_SESSION['role']==="doctor") {
     $doctor = new DoctorData();
-    $cookie=json_decode($_COOKIE['userdata'],true);
+    $cookie = json_decode($_COOKIE['userdata'],true);
     $doctorList = $doctor->profile($cookie['id']);
+    $doctorDetail = $doctorList[0];
 ?>
+<center><h1>Doctor Profile</h1></center>
 <table>
     <thead>
-        <th>ID</th>
-        <th>First Name</th>
-        <th>Last Name</th>
-        <th>Gender</th>
-        <th>Contact</th>
-        <th>Age</th>
-        <th>Address</th>
-        <th>Qualification</th>
-        <th>Email</th>
-        <th>DOB</th>
-        <th>District</th>
-        <th>State</th>
-        <th>Country</th>
-        <th>Pincode</th>
-    </thead>
-    <tbody>
         <tr>
-            <td><?= $doctorList[0]['d_id'] ?></td>
-            <td><?= $doctorList[0]['firstName'] ?></td>
-            <td><?= $doctorList[0]['lastName'] ?></td>
-            <td><?= $doctorList[0]['gender'] ?></td>
-            <td><?= $doctorList[0]['contact'] ?></td>
-            <td><?= $doctorList[0]['age'] ?></td>
-            <td><?= $doctorList[0]['address'] ?></td>
-            <td><?= $doctorList[0]['qualification'] ?></td>
-            <td><?= $doctorList[0]['email'] ?></td>
-            <td><?= date("d-M-Y",strtotime($doctorList[0]['dob'])) ?></td>
-            <td><?= $doctorList[0]['district'] ?></td>
-            <td><?= $doctorList[0]['state'] ?></td>
-            <td><?= $doctorList[0]['country'] ?></td>
-            <td><?= $doctorList[0]['pincode'] ?></td>
+            <th>Profile Image</th>
+            <td><?php 
+                $images = new ImageData();
+                $doctor_image = $images->selectDoctorImage($cookie['id']);
+                if($doctor_image == "") {
+                    echo "<img src=views/DefaultProfile/profile.png width='150' height='150'>";
+                } else {
+                    echo "<img src=views/DoctorImageUploads/".$doctor_image." width='150' height='150'>";
+                }
+                ?>
+            </td>
         </tr>
-    </tbody>
+        <tr>
+            <th>User Name</th>
+            <td><?= $doctorDetail['firstname']?></td>
+        </tr>  
+        <tr>
+            <th>Gender</th>
+            <td><?= $doctorDetail['gender']?></td> 
+        </tr> 
+        <tr>
+            <th>User Email</th>
+            <td><?= $doctorDetail['email']?></td><br>
+        </tr>
+        <tr>
+            <th>Age</th>
+            <td><?= $doctorDetail['age']?></td>
+        </tr>
+        <tr>
+            <th>DOB</th>
+            <td><?= date("d-M-Y",strtotime($doctorDetail['dob'])) ?></td><br>
+        </tr>
+        <tr>
+            <th>Qualification</th>
+            <td><?= $doctorDetail['qualification']?></td>
+        </tr>
+        <tr>
+            <th>Change Password</th>
+            <td>
+                <form name="Password" action="ChangePassword?user_id=<?= $cookie['id']?>" method="POST">
+                    <input type="submit" name="submit" value="Change Password" id="updatePass">
+                </form>
+            </td>
+        </tr>
+        <tr>
+            <th>Change Profile Photo</th>
+            <td>
+                <form id="image_upload" action="DoctorProfilePost" name="image_upload" method="POST" enctype="multipart/form-data" onsubmit="return doctorFileUpload();">
+                    <input type="file" name="doctor_image" id="myfile">
+                    <input type="submit" name="submit" value="Upload" id="upload">
+                </form>
+                <p id="status"></p>
+                <script type="text/javascript" src="views/js/doctorFileUpload.js"></script>
+            </td>
+        </tr>
+    </thead>
 </table>
 <?php } ?>

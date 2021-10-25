@@ -11,10 +11,7 @@ class DoctorHomeController extends Controller
      */
     public function process($postParams)
     {
-        $this->head = array(
-            'title'=>'Doctor',
-            'description'=>'Doctor Home Page'
-        );
+        $this->head = ['title'=>'Doctor','description'=>'Doctor Home Page'];
         $this->view = 'DoctorHome';
     }
 }

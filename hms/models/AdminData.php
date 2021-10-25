@@ -15,30 +15,25 @@ class AdminData
      */
     public function __construct()
     {
-        $dbConnect =  new dbConnect();;
+        $dbConnect = new dbConnect();;
         $this->dbConnect = $dbConnect->connect();
     }
-    /**
+    /** 
      *  Method for select all data from admin table.
      *  @param string $email has the email id of user.
      *  @param string $password has password of user
-     *  @var string $table has a table name.
-     *  @var array $stmt has the query statement.
      *  @return array $records has the result data.
      */
     public function selectAdmin($email,$password)
     {
         $table = self::TABLE_NAME;
-        $stmt = $this->dbConnect->prepare("SELECT * FROM $table where
-        email = ? AND password = ? LIMIT 1");
+        $stmt = $this->dbConnect->prepare("SELECT * FROM $table where email = ? AND password = ? LIMIT 1");
         $stmt->execute([$email,$password]); 
         $records = $stmt->fetchAll();
         return $records;
     }
     /**
      *  Method for select admin details.
-     *  @var string $table has the table name.
-     *  @var array $stmt has the query statement.
      *  @return array $records has the result data.
      */
     public function profile()
@@ -48,5 +43,15 @@ class AdminData
         $stmt->execute(); 
         $records = $stmt->fetchAll();
         return $records;
+    }
+    /**
+     *  Method for select update password.
+     *  @param $password, $id has the new password and admin id.
+     */
+    public function updatePassword($password,$id)
+    {
+        $table = self::TABLE_NAME;
+        $stmt = $this->dbConnect->prepare("UPDATE $table SET password = ? WHERE user_id = ?");
+        $stmt->execute([$password,$id]); 
     }
 }

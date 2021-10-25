@@ -1,140 +1,263 @@
 <head>
-  <style>
-    fieldset{
-      background-color:#CCC;
-      max-width:900px;
-      padding: 20px;	
-      margin-left: 12%;
-      border: 5px outset black;
-    }
-  </style>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="views/css/doctor.css">
 </head>
-<?php
-if($_SESSION['role']==='admin'){?>
-<nav>
-  <ul>
-    <li><a href="AdminHome">Home</a></li>
-    <li><a>Patient</a>
-      <ul class="dropdown">
-        <li><a href="Patient">Add Patient</a></li>
-        <li><a href="ListPatients">List Patient</a></li>
-      </ul>
-    </li>
-    <li><a>Staff</a>
-      <ul class="dropdown">
-        <li><a href="staff">Add Staff</a></li>
-        <li><a href="ListStaffs">List Staff</a></li>
-      </ul>
-    </li>
-    <li><a>Doctor</a>
-      <ul class="dropdown">
-        <li><a href="Doctor">Add Doctor</a></li>
-        <li><a href="ListDoctors">List Doctor</a></li>
-      </ul>
-    </li>
-    <li class="profile"><a href="profile">My Profile</a></li>
-    <li class="logout"><a href="logout">Logout</a></li> 
-  </ul>
-</nav>
-<?php } ?>
-<?php
-if($_SESSION['role']==='staff'){?>
-<nav>
-  <ul>
-    <li><a href="StaffHome">Home</a></li>
-    <li><a>Patient</a>
-      <ul class="dropdown">
-        <li><a href="Patient">Add Patient</a></li>
-        <li><a href="ListPatients">List Patient</a></li>
-      </ul>
-    </li>
-    <li><a>Doctor</a>
-      <ul class="dropdown">
-        <li><a href="Doctor">Add Doctor</a></li>
-        <li><a href="listDoctor">List Doctor</a></li>
-      </ul>
-    </li>
-    <li class="profile"><a href="profile">My Profile</a></li>
-    <li class="logout"><a href="logout">Logout</a></li>
-  </ul>
-</nav>
-<?php } ?>
-<h2><center>Add Doctor</center></h2>
-<fieldset>
-<form name="doctorLogin" method="POST" action="DoctorPost">
-    <p>
-        <label for="firstname">Enter first name</label>
-        <input type="text" id="firstname" name="firstname">
-    </p>
-    <p>
-        <label for="lastname">Enter last name</label>
-        <input type="text" id="lastname" name="lastname">
-    </p>
-    <p>
-        <p>Select Gender</p>
-        <input type="radio" id="male" name="gender" value="male">
-        <label for="male">Male</label>
-        <input type="radio" id="female" name="gender" value="female">
-        <label for="female">Female</label>
-    </p>
-    <p>
-        <label for="dob">Enter Date Of Birth</label>
-        <input type="date" id="dob" name="dob">
-    </p>
-    <p>
-        <label for="age">Enter age</label>
-        <input type="number" id="age" name="age">
-    </p>
-    <p>
-        <label for="email">Enter email id</label>
-        <input type="email" id="email" name="email">
-    </p>
-    <p>
-        <label for="contact">Enter Contact Number</label>
-        <input type="tel" id="contact" name="contact" pattern="[0-9]{10}">
-    </p>
-    <p>
-        <label for="password">Enter Password</label>
-        <input type="password" id="password" name="password">
-    </p>
-    <p>
-      <label for= "address">Enter Address</label>
-      <textarea id="address" name="address" rows="4" cols="30" placeholder="Enter your address here"></textarea>
-    </p>
-    <div>
-        <label for="district">District</label>
-        <input type="text" id="district" name="district">
-        <label for="state">State</label>
-        <select id="state" name="state">
-          <option value="Select State">Select State</option> 
-          <?php 
-          $state = new StateData();
-          $result = $state->selectState();
-          while($row = $result->fetch(PDO::FETCH_ASSOC)) {?>
-          <option value=<?php echo $row['state_name']; ?>> <?php echo $row['state_name'];?></option>
-          <?php } ?>
-          ?>
-        </select>
-        <label for="country">Country</label>
-        <select id="country" name="country">
-          <option value="Select Country">Select Country</option>
-          <?php 
-          $country = new CountryData();
-          $result = $country->selectCountry();
-          while($row = $result->fetch(PDO::FETCH_ASSOC)) {?>
-          <option value=<?php echo $row['country_name']; ?>> <?php echo $row['country_name'];?></option>
-          <?php } ?>
-          ?>
-        </select>
-        <label for="pincode">Postal code</label>
-        <input type="text" id="pincode" name="pincode">
-    </div>
-    <p>
-        <label for="qualification">Enter Qualification</label>
-        <input type="text" id="qualification" name="qualification">
-    </p>
-    <p>
-        <input type="submit" value="Save" name="submit">
-    </p>
-</form>
-</fieldset>
+<?php 
+if ($_SESSION['role']==="admin") {
+  require_once("views/AdminHome.phtml");
+} 
+?>
+<?php 
+if ($_SESSION['role']==="staff") {
+  require_once("views/StaffHome.phtml");
+} 
+?>
+<?php 
+    if (isset($_GET['d_id'])) {
+        $id = $_GET['d_id'];
+        $update = true;
+        $doctor = new DoctorData();
+        $result = $doctor->ViewDoctor($id);
+    } else {
+        $id = 0;
+        $update = false;
+    }
+?>
+<div class="container">
+    <form name="doctorLogin" role="form" method="POST" class="doctorLogin" action="DoctorPost" onsubmit="return doctorValidation('doctorLogin')" enctype="multipart/form-data" autocomplete="on">
+        <fieldset>
+            <?php if($update===true): ?>
+                <center><legend>Update Doctor</legend></center>
+            <?php else: ?>
+                <center><legend>Add Doctor</legend></center>
+            <?php endif ?>
+            <p>
+                <?php if($update===true): ?>
+                    <input type="hidden" id="d_id" name="d_id" value="<?php echo $id; ?>">
+                <?php endif ?>
+            </p>
+            <div class="form-group row">
+                <label for="firstname">First Name</label>
+                <div class="col-sm-4">
+                    <input type="text" id="firstname" name="firstname" placeholder="Enter your first name"
+                    <?php if($update === true): ?>
+                        value="<?php echo $result['firstname']?>" 
+                    <?php else: ?>
+                        value="" 
+                    <?php endif ?> required>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="lastname">Last Name</label>
+                <div class="col-sm-4">
+                    <input type="text" id="lastname" name="lastname" placeholder="Enter your last name"
+                    <?php if($update === true): ?>
+                        value="<?php echo $result['lastname']?>" 
+                    <?php else: ?>
+                        value="" 
+                    <?php endif ?> required> 
+                </div>
+            </div>
+            <div class="form-group row">
+                <label>Gender</label><br>
+                <div class="col-sm-4">
+                    <?php if($update === true): ?>
+                        <input type="radio" id="male" name="gender" <?php if($result['gender']=='male') { ?> checked='checked' <?php } ?> value="male"></input>
+                    <?php else: ?>
+                        <input type="radio" id="male" name="gender" value="Male">
+                    <?php endif ?>
+                    <label for="male" id="gender">Male</label>
+                    <?php if($update === true): ?>
+                        <input type="radio" id="female" name="gender" <?php if($result['gender']=='female') { ?> checked='checked' <?php } ?> value="female"></input>
+                    <?php else: ?>
+                        <input type="radio" id="female" name="gender" value="female">
+                    <?php endif ?>
+                    <label for="female" id="gender">Female</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="dob">Date Of Birth</label>
+                <div class="col-sm-4">
+                    <input type="date" id="dob" name="dob" placeholder="Enter your date of birth"
+                    <?php if($update === true): ?>
+                        value="<?php echo $result['dob']?>" 
+                    <?php else: ?>
+                        value="" 
+                    <?php endif ?> required>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="age">Age</label>
+                <div class="col-sm-4">
+                    <input type="number" id="age" name="age" placeholder="Enter your age" 
+                    <?php if($update === true): ?>
+                        value="<?php echo $result['age']?>" 
+                    <?php else: ?>
+                        value="" 
+                    <?php endif ?> required>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="email">Email Address</label>
+                <div class="col-sm-4">
+                    <input type="email" id="email" name="email" placeholder="Enter email address"
+                    <?php if($update === true): ?>
+                        value="<?php echo $result['email']?>" 
+                    <?php else: ?>
+                        value="" 
+                    <?php endif ?> required>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="contact">Contact Number</label>
+                <div class="col-sm-4">
+                    <input type="tel" id="contact" name="contact" pattern="[0-9]{10}" placeholder="Enter mobile number" 
+                    <?php if($update === true): ?>
+                        value="<?php echo $result['contact']?>" 
+                    <?php else: ?>
+                        value="" 
+                    <?php endif ?> required>
+                </div>
+            </div>
+            <?php if($update === false) { ?>
+                <div class="form-group row">
+                    <label for="password">Password</label>
+                    <div class="col-sm-4">
+                        <input type="password" id="password" name="password" placeholder="Enter Password" required>
+                    </div>
+                </div>
+            <?php } ?>
+            <div class="form-group row">
+                <label for= "address">Address</label><br>
+                <div class="col-sm-4">
+                    <?php if($update === true): ?>
+                        <textarea id="address" name="address" rows="4" cols="30"><?php echo $result['address']?></textarea>
+                    <?php else: ?>
+                        <textarea id="address" name="address" rows="4" cols="30" placeholder="Enter your address here"></textarea>
+                    <?php endif ?>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="country">Country</label>
+                <div class="col-sm-4">
+                    <select id="country" name="country" onchange="getStateByCountry(this.value, 'state');">
+                    <option value="Select Country" >Select Country</option>
+                    <?php 
+                    $country = new CountryData();
+                    $result1 = $country->selectCountry(); 
+                    while ($row = $result1->fetch(PDO::FETCH_ASSOC)) {?>
+                    <?php if($update === true): ?>
+                        <option value=<?php echo $row['country_id']; ?> <?php if($result['country'] == $row['country_name']){ echo "selected";}?>> <?php echo $row['country_name'];?></option>
+                    <?php else: ?>
+                        <option value=<?php echo $row['country_id']; ?>><?php echo $row['country_name'];?></option>
+                    <?php endif ?>
+                        <?php } ?>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="state">State</label>
+                <div class="col-sm-4">
+                    <select id="state" name="state">
+                        <?php
+                        if($update === true): ?>
+                            <option value=<?php echo $result['state']; ?> <?php if($result['state']){ echo "selected";}?>> <?php echo $result['state'];?></option>
+                        <?php else: ?>
+                            <option value="Select State" >Select State</option>
+                        <?php endif ?>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="district">District</label>
+                <div class="col-sm-4">
+                    <input type="text" id="district" name="district" placeholder="Enter district"
+                    <?php if($update === true): ?>
+                        value = "<?php echo $result['district']?>"
+                    <?php else: ?>
+                        <?php echo ""?>
+                    <?php endif ?> required>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="pincode">Postal code</label>
+                <div class="col-sm-4">
+                    <input type="text" id="pincode" name="pincode" placeholder="Enter pincode"
+                    <?php if($update === true): ?>
+                        value = "<?php echo $result['pincode']?>"
+                    <?php else: ?>
+                        <?php echo ""; ?>
+                    <?php endif ?> required>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="qualification">Qualification</label>
+                <div class="col-sm-4">
+                    <input type="text" id="qualification" name="qualification" placeholder="Enter your qualification"
+                    <?php if($update === true): ?>
+                        value = "<?php echo $result['qualification']?>"
+                    <?php else: ?>
+                        <?php echo ""; ?>
+                    <?php endif ?> required>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="specialist">Specialist</label>
+                <div class="col-sm-4">
+                    <select id="specialist" name="specialist">
+                        <?php if($update === true): ?>
+                            <option value=<?php echo $result['specialist']; ?> <?php if($result['specialist'] == $result['specialist']){ echo "selected";}?>> <?php echo $result['specialist'];?></option>
+                            <option value="General">General</option>
+                            <option value="Nutritionist">Nutritionist</option>
+                            <option value="Cardiologist">Cardiologist</option>
+                        <?php else: ?>
+                            <option value="Please Select">Please Select</option>    
+                            <option value="General">General</option>
+                            <option value="Nutritionist">Nutritionist</option>
+                            <option value="Cardiologist">Cardiologist</option>
+                        <?php endif ?>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="from_time">From Time</label>
+                <div class="col-sm-4">
+                    <input type="time" id="from_time" name="from_time" 
+                    <?php if($update === true): ?>
+                        value = "<?php echo $result['from_time']?>"
+                    <?php else: ?>
+                        <?php echo ""?>
+                    <?php endif ?> required>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="to_time">To Time</label>
+                <div class="col-sm-4">
+                    <input type="time" id="to_time" name="to_time"
+                    <?php if($update === true): ?>
+                        value = "<?php echo $result['to_time']?>"
+                    <?php else: ?>
+                        <?php echo ""?>
+                    <?php endif ?> required>
+                </div>
+            </div>
+            <div class="form-group row">
+                <?php if($update === true) { ?>
+                    <label for="status">Status</label>
+                    <div class="col-sm-4">
+                        <input type="text" id="status" name="status" value="<?php echo $result['status'] ?>">
+                    </div>
+                <?php } ?>
+            </div>
+            <div class="form-group row">
+                <div class="offset-sm-2 col-sm-10">
+                    <?php if($update===true): ?>
+                        <input type="submit" value="Update" name="submit">
+                    <?php else: ?>
+                        <input type="submit" id="Save" value="Save" name="submit">
+                    <?php endif ?>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>

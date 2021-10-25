@@ -3,6 +3,7 @@
 /** 
  *  ProfileController renders the profile view page
  */
+error_reporting(0);
 class ProfileController extends Controller
 {
     /**
@@ -10,10 +11,7 @@ class ProfileController extends Controller
      *  Renders the profile page.
      */
     public function process($params){
-        $this->head = array(
-            'title'=>'User Profile',
-            'description'=>'User Profile Page'
-        );
+        $this->head = ['title'=>'User Profile','description'=>'User Profile Page'];
         $this->view = 'profile';
     }
 }

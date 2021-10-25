@@ -17,12 +17,12 @@ class DoctorPostController extends Controller
         'age' => 'int',
         'email' => 'email',
         'contact' => 'int',
-        'password' => 'string',
         'address' => 'string',
         'qualification' => 'string'
     ];
     protected $validator;
     protected $doctorData;
+    protected $countryData;
     /**
      *  Method for instantiate the objects for class.
      *  instantiates object for Validator and DoctorData class.
@@ -31,33 +31,51 @@ class DoctorPostController extends Controller
     {
         $this->validator = new Validator($this->fields);
         $this->doctorData = new DoctorData();
+        $this->countryData = new CountryData();
         parent::__construct();
     }
     /**
      *  Method for Processing the data given in the form.
      *  validates the fields and display error and success messages.
-     *  @var array $postData has the data given in the form
-     *  @var array $error used to display the error messages
-     *  @var bool $success flag to check all the conditions passed or not.
      *  @param array $params url address in the array.
      */
     public function process($params)
     {
         $postData = $_POST;
+        $countryName = $this->countryData->SelectCountryName($postData['country']);
+        $details = [
+            'd_id' => $postData['d_id'],
+            'firstname' => $postData['firstname'],
+            'lastname' => $postData['lastname'],
+            'gender' => $postData['gender'],
+            'dob' => $postData['dob'],
+            'age' => $postData['age'],
+            'email' => $postData['email'],
+            'contact' => $postData['contact'],
+            'password' => md5($postData['password']),
+            'address' => $postData['address'],
+            'qualification' => $postData['qualification'],
+            'district' => $postData['district'],
+            'state' => $postData['state'],
+            'country' => $countryName,
+            'pincode' => $postData['pincode'],
+            'specialist' => $postData['specialist'],
+            'from_time' => $postData['from_time'],
+            'to_time' => $postData['to_time']
+        ];
         $errors = $this->validator->process($postData);
-        if($errors) {
+        if ($errors) {
             $this->messageManager->addErrorMessage(implode(' </br>', $errors));
             return $this->redirect('doctor');
         }
         $success = false;
         try {
-            switch($postData['submit'])
-            {
+            switch ($postData['submit']) {
                 case 'Save':
-                    $this->doctorData->addDoctor($postData['firstname'],$postData['lastname'],$postData['gender'],$postData['dob'],$postData['age'],$postData['email'],$postData['contact'],md5($postData['password']),$postData['address'],$postData['qualification'],$postData['district'],$postData['state'],$postData['country'],$postData['pincode']);
+                    $this->doctorData->addDoctor($details,1);
                     break;
                 case 'Update':
-                    $this->doctorData->updateDoctor($postData['firstname'],$postData['lastname'],$postData['gender'],$postData['dob'],$postData['age'],$postData['email'],$postData['contact'],md5($postData['password']),$postData['address'],$postData['qualification'],$postData['district'],$postData['state'],$postData['country'],$postData['pincode']);
+                    $this->doctorData->updateDoctor($details,$postData['status']);
                     break;
             }
             $success = true;
@@ -66,12 +84,12 @@ class DoctorPostController extends Controller
         } catch (\Exception $e) {
             $this->messageManager->addErrorMessage('Unable to add doctor');
         } 
-        if($success) {
-            if($postData['submit']==='Save') {
+        if ($success) {
+            if ($postData['submit'] === 'Save') {
                 $this->messageManager->addSuccessMessage('Doctor details added Successfully');
                 $this->redirect('Doctor');
             }
-            if($postData['submit']==='Update') {
+            if ($postData['submit'] === 'Update') {
                 $this->messageManager->addSuccessMessage('Doctor details updated');
                 $this->redirect('Doctor');
             }

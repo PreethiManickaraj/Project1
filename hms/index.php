@@ -20,4 +20,7 @@ function autoloadFunction($class)
 // instance for router
 $router = new RouterController();
 $router->process(array($_SERVER['REQUEST_URI']));
-$router->renderView();
+
+if(!$router->isAjax() && !$router->isReport()) {
+    $router->renderView();
+}
