@@ -31,7 +31,6 @@
         file_put_contents('bar.txt','hello');
         //file_put_contents('bar.txt','world',FILE_APPEND);
         file_put_contents('foo.txt',"Hello World");
-        clearstatcache();
         //unlink('bar.txt'); to delete file
         echo filesize('foo.txt')."<br>";
         print_r(pathinfo('FileSystem.php'));

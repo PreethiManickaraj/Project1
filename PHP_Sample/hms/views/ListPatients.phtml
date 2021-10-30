@@ -1,0 +1,456 @@
+<head>
+    <link rel="stylesheet" href="views/css/ListPatients.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+</head>
+<?php 
+if ($_SESSION['role']==="doctor") {
+  require_once("views/DoctorHome.phtml");
+  $cookie = json_decode($_COOKIE['userdata'],true);
+  $patients = new PatientData();
+  $appointment = new AppointmentData();
+  $list= $appointment->appList($cookie['id']);
+  $list1 = [];
+  foreach($list as  $value) {
+    if(in_array($value['patient_id'],$list1)==false) {
+        $list1[] = $value['patient_id'];
+    }       
+  }
+  $record_per_page = 5;
+  if (isset($_GET["page"])) {
+      $page = $_GET["page"]; 
+  } else {
+      $page = 1;
+  }
+  $start_from = ($page-1) * $record_per_page;
+  $patientLimit = $patients->listPerPage($start_from,$record_per_page);
+?>
+<div class="searchBox">
+    <form action="ListPatients" method="GET">
+        <input type="text" id="search" name="search" placeholder="&#128269 Search" >
+        <input type="submit" name="submit" value="Search">
+    </form>
+</div>
+<?php
+if(isset($_GET['search'])) {
+    $search = $_GET['search'];
+    $PatientName = new PatientData();
+    $SearchPatientName = $PatientName->SearchPatientsName($search);
+    if($SearchPatientName->rowCount() === 0 || $search === "") {
+        $this->messageManager->addErrorMessage("Record Not Found");
+        $this->redirect('ListPatients');
+    }
+    if($SearchPatientName->rowCount() > 0) { ?>
+    <div>
+        <table>
+            <thead>
+            <th>ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Gender</th>
+            <th>Contact</th>
+            <th>Email</th>
+            <th>District</th>
+            <th>State</th>
+            <th>Country</th>
+            <th>Actions</th>
+        </thead>
+        <tbody>
+            <?php while ($row = $SearchPatientName->fetch(PDO::FETCH_ASSOC)) {
+                ?>
+                <tr>
+                    <td><?= $row['p_id']?></td>
+                    <td><?= $row['firstname'] ?></td>
+                    <td><?= $row['lastname'] ?></td>
+                    <td><?= $row['gender'] ?></td>
+                    <td><?= $row['contact'] ?></td>
+                    <td><?= $row['email'] ?></td>
+                    <td><?= $row['district'] ?></td>
+                    <td><?php 
+                    if(is_numeric($row['state'])){
+                        $State = $state->SelectStateName($row['state']);
+                        echo $State;
+                    } else {
+                        echo $row['state'];
+                    }
+                    ?></td>
+                    <td><?php 
+                    if(is_numeric($row['country'])){
+                        $Country = $country->SelectCountryName($row['country']);
+                        echo $Country;
+                    } else {
+                        echo $row['country'];
+                    }
+                    ?></td>
+                    <td><button><a href="ViewPatient?p_id=<?= $row['p_id']?>">View</a></button>  <button><a href="patient?p_id=<?= $row['p_id']?>">Edit</a></button></td>
+                </tr>
+            <?php } ?>
+        </tbody>
+    </table>
+        </table>
+    </div>
+<?php } 
+} else { ?>
+<div><br>
+    <table>
+        <thead>
+            <th>ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Gender</th>
+            <th>Contact</th>
+            <th>Email</th>
+            <th>District</th>
+            <th>State</th>
+            <th>Country</th>
+            <th>Actions</th>
+        </thead>
+        <tbody>
+            <?php for($i=0;$i<count($list1);$i++){
+                $patientList = $patients->listPatient($list1[$i]);
+                while ($row = $patientList->fetch(PDO::FETCH_ASSOC)) {
+                ?>
+                <tr>
+                    <td><?= $row['p_id']?></td>
+                    <td><?= $row['firstname'] ?></td>
+                    <td><?= $row['lastname'] ?></td>
+                    <td><?= $row['gender'] ?></td>
+                    <td><?= $row['contact'] ?></td>
+                    <td><?= $row['email'] ?></td>
+                    <td><?= $row['district'] ?></td>
+                    <td><?php 
+                    if(is_numeric($row['state'])){
+                        $State = $state->SelectStateName($row['state']);
+                        echo $State;
+                    } else {
+                        echo $row['state'];
+                    }
+                    ?></td>
+                    <td><?php 
+                    if(is_numeric($row['country'])){
+                        $Country = $country->SelectCountryName($row['country']);
+                        echo $Country;
+                    } else {
+                        echo $row['country'];
+                    }
+                    ?></td>
+                    <td><button><a href="ViewPatient?p_id=<?= $row['p_id']?>">View</a></button></td>
+                </tr>
+            <?php } ?>
+            <?php } ?>
+        </tbody>
+    </table>
+</div>
+<?php } ?>
+<?php } ?>
+<?php 
+if($_SESSION['role'] === "staff"){
+  require_once("views/StaffHome.phtml");
+  $patients = new PatientData();
+  $patientsList = $patients->listPatients(); 
+  $country = new CountryData();
+  $state = new StateData();
+  $record_per_page = 5;
+  if (isset($_GET["page"])) {
+      $page = $_GET["page"];
+  } else {
+      $page = 1;
+  }
+  $start_from = ($page-1) * $record_per_page;
+  $patientLimit = $patients->listPerPage($start_from,$record_per_page);
+?>
+<div class="searchBox">
+    <form action="ListPatients" method="GET">
+        <input type="text" id="search" name="search" placeholder="&#128269 Search">
+        <input type="submit" name="submit" value="Search">
+    </form>
+</div>
+<?php
+if(isset($_GET['search'])) {
+    $search = $_GET['search'];
+    $PatientName = new PatientData();
+    $SearchPatientName = $PatientName->SearchPatientName($search);
+    if($SearchPatientName->rowCount() === 0 ) {
+        $this->messageManager->addErrorMessage("Record Not Found");
+        $this->redirect('ListPatients');
+    }
+    if($SearchPatientName->rowCount() > 0) { ?>
+    <div>
+        <table>
+            <thead>
+                <th>ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Gender</th>
+                <th>Contact</th>
+                <th>Email</th>
+                <th>District</th>
+                <th>State</th>
+                <th>Country</th>
+                <th>Actions</th>
+            </thead>
+        <tbody>
+            <?php while ($row = $SearchPatientName->fetch(PDO::FETCH_ASSOC)) {
+                ?>
+                <tr>
+                    <td><?= $row['p_id']?></td>
+                    <td><?= $row['firstname'] ?></td>
+                    <td><?= $row['lastname'] ?></td>
+                    <td><?= $row['gender'] ?></td>
+                    <td><?= $row['contact'] ?></td>
+                    <td><?= $row['email'] ?></td>
+                    <td><?= $row['district'] ?></td>
+                    <td><?php 
+                    if(is_numeric($row['state'])){
+                        $State = $state->SelectStateName($row['state']);
+                        echo $State;
+                    } else {
+                        echo $row['state'];
+                    }
+                    ?></td>
+                    <td><?php 
+                    if(is_numeric($row['country'])){
+                        $Country = $country->SelectCountryName($row['country']);
+                        echo $Country;
+                    } else {
+                        echo $row['country'];
+                    }
+                    ?></td>
+                    <td><button><a href="ViewPatient?p_id=<?= $row['p_id']?>">View</a></button>  <button><a href="patient?p_id=<?= $row['p_id']?>">Edit</a></button></td>
+                </tr>
+            <?php } ?>
+        </tbody>
+    </table>
+        </table>
+    </div>
+<?php } 
+} else { ?>
+<div><br>
+    <table>
+        <thead>
+            <?php 
+                $columns = array('p_id','firstname','lastname','gender','contact','email','district','state','country');
+                $column = isset($_GET['column']) && in_array($_GET['column'], $columns) ? $_GET['column'] : $columns[0];
+                $sort_order = isset($_GET['order']) && strtolower($_GET['order']) == 'asc' ? 'ASC' : 'DESC';
+                if ($result = $patients->tableSort($start_from,$record_per_page,$column,$sort_order)) {
+                    $up_or_down = str_replace(array('ASC','DESC'), array('up','down'), $sort_order); 
+                    $asc_or_desc = $sort_order == 'ASC' ? 'desc' : 'asc';
+            ?>
+            <th><a href="ListPatients?column=name&order=<?php echo $asc_or_desc; ?>">ID <i class="fas fa-sort<?php echo $column == 'p_id' ? '-' . $up_or_down : ''; ?>"></i></a></th>
+            <th><a href="ListPatients?column=name&order=<?php echo $asc_or_desc; ?>">First Name <i class="fas fa-sort<?php echo $column == 'firstname' ? '-' . $up_or_down : ''; ?>"></i></a></th>
+            <th><a href="ListPatients?column=name&order=<?php echo $asc_or_desc; ?>">Last Name <i class="fas fa-sort<?php echo $column == 'lastname' ? '-' . $up_or_down : ''; ?>"></i></a></th>
+            <th><a href="ListPatients?column=name&order=<?php echo $asc_or_desc; ?>">Gender <i class="fas fa-sort<?php echo $column == 'gender' ? '-' . $up_or_down : ''; ?>"></i></a></th>
+            <th><a href="ListPatients?column=name&order=<?php echo $asc_or_desc; ?>">Contact <i class="fas fa-sort<?php echo $column == 'contact' ? '-' . $up_or_down : ''; ?>"></i></a></th>
+            <th><a href="ListPatients?column=name&order=<?php echo $asc_or_desc; ?>">Email <i class="fas fa-sort<?php echo $column == 'email' ? '-' . $up_or_down : ''; ?>"></i></a></th>
+            <th><a href="ListPatients?column=name&order=<?php echo $asc_or_desc; ?>">District <i class="fas fa-sort<?php echo $column == 'district' ? '-' . $up_or_down : ''; ?>"></i></a></th>
+            <th><a href="ListPatients?column=name&order=<?php echo $asc_or_desc; ?>">State <i class="fas fa-sort<?php echo $column == 'state' ? '-' . $up_or_down : ''; ?>"></i></a></th>
+            <th><a href="ListPatients?column=name&order=<?php echo $asc_or_desc; ?>">Country <i class="fas fa-sort<?php echo $column == 'country' ? '-' . $up_or_down : ''; ?>"></i></a></th>
+            <th>Actions</th>
+        </thead>
+        <tbody>
+            <?php while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+                ?>
+                <tr>
+                    <td><?= $row['p_id']?></td>
+                    <td><?= $row['firstname'] ?></td>
+                    <td><?= $row['lastname'] ?></td>
+                    <td><?= $row['gender'] ?></td>
+                    <td><?= $row['contact'] ?></td>
+                    <td><?= $row['email'] ?></td>
+                    <td><?= $row['district'] ?></td>
+                    <td><?php 
+                    if(is_numeric($row['state'])){
+                        $State = $state->SelectStateName($row['state']);
+                        echo $State;
+                    } else {
+                        echo $row['state'];
+                    }
+                    ?></td>
+                    <td><?php 
+                    if(is_numeric($row['country'])){
+                        $Country = $country->SelectCountryName($row['country']);
+                        echo $Country;
+                    } else {
+                        echo $row['country'];
+                    }
+                    ?></td>
+                    <td><button><a href="ViewPatient?p_id=<?= $row['p_id']?>">View</a></button>  <button><a href="patient?p_id=<?= $row['p_id']?>">Edit</a></button>  <button><a href="Appointment?p_id=<?= $row['p_id']?>">Add Appointment</a></button></td>
+                </tr>
+            <?php } ?>
+        </tbody>
+    </table>
+</div>
+<div class="pagination">
+    <?php 
+        $total_records = $patients->countRecords();
+        $total_pages = ceil($total_records/$record_per_page);
+        $pageLink = "";
+        for ($i=1; $i<=$total_pages; $i++) {   
+            if ($i == $page) {   
+                $pageLink .= "<a class='active' href='ListPatients?page=".$i."'>".$i."</a>";   
+            }               
+            else  {   
+                $pageLink .= "<a href='ListPatients?page=".$i."'>".$i."</a>";     
+            }   
+        };
+        echo $pageLink;       
+    ?>
+</div>
+<?php } ?>
+<?php } ?>
+<?php } ?>
+<?php 
+if ($_SESSION['role']==="admin") {
+  require_once("views/AdminHome.phtml");
+  $patients = new PatientData();
+  $patientsList = $patients->listPatients(); 
+  $country = new CountryData();
+  $state = new StateData();
+  $record_per_page = 5;
+  if(isset($_GET["page"])) {
+      $page = $_GET["page"];
+  } else {
+      $page = 1;
+  }
+  $start_from = ($page-1) * $record_per_page;
+  $patientLimit = $patients->listPerPage($start_from,$record_per_page);
+  //print_r($patientLimit);die;
+?>
+<div class="searchBox">
+    <form action="ListPatients" method="GET" id="SearchBoxForm">
+        <input type="text" id="search" name="search" placeholder="&#128269 Search">
+        <input type="submit" name="submit" value="Search">
+    </form>
+</div>
+<?php
+if(isset($_GET['search'])) {
+    $search = $_GET['search'];
+    $PatientName = new PatientData();
+    $SearchPatientName = $PatientName->SearchPatientName($search);
+    if($SearchPatientName->rowCount() === 0) {
+        $this->messageManager->addErrorMessage("Record Not Found");
+        $this->redirect('ListPatients');
+    }
+    if($SearchPatientName->rowCount() > 0) { ?>
+    <div>
+        <table>
+            <thead>
+            <th>ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Gender</th>
+            <th>Contact</th>
+            <th>Email</th>
+            <th>District</th>
+            <th>State</th>
+            <th>Country</th>
+            <th>Actions</th>
+        </thead>
+        <tbody>
+            <?php while ($row = $SearchPatientName->fetch(PDO::FETCH_ASSOC)) {
+                ?>
+                <tr>
+                    <td><?= $row['p_id']?></td>
+                    <td><?= $row['firstname'] ?></td>
+                    <td><?= $row['lastname'] ?></td>
+                    <td><?= $row['gender'] ?></td>
+                    <td><?= $row['contact'] ?></td>
+                    <td><?= $row['email'] ?></td>
+                    <td><?= $row['district'] ?></td>
+                    <td><?php 
+                    if(is_numeric($row['state'])){
+                        $State = $state->SelectStateName($row['state']);
+                        echo $State;
+                    } else {
+                        echo $row['state'];
+                    }
+                    ?></td>
+                    <td><?php 
+                    if(is_numeric($row['country'])){
+                        $Country = $country->SelectCountryName($row['country']);
+                        echo $Country;
+                    } else {
+                        echo $row['country'];
+                    }
+                    ?></td>
+                    <td><button><a href="ViewPatient?p_id=<?= $row['p_id']?>">View</a></button>  <button><a href="patient?p_id=<?= $row['p_id']?>">Edit</a></button></td>
+                </tr>
+            <?php } ?>
+        </tbody>
+    </table>
+    </div>
+<?php } 
+} else { ?>
+<div><br>
+    <table>
+        <thead>
+            <?php 
+                $columns = array('p_id','firstname','lastname','gender','contact','email','district','state','country');
+                $column = isset($_GET['column']) && in_array($_GET['column'], $columns) ? $_GET['column'] : $columns[0];
+                $sort_order = isset($_GET['order']) && strtolower($_GET['order']) == 'asc' ? 'ASC' : 'DESC';
+                if ($result = $patients->tableSort($start_from,$record_per_page,$column,$sort_order)) {
+                    $up_or_down = str_replace(array('ASC','DESC'), array('up','down'), $sort_order); 
+                    $asc_or_desc = $sort_order == 'ASC' ? 'desc' : 'asc';
+            ?>
+            <th><a href="ListPatients?column=name&order=<?php echo $asc_or_desc; ?>">ID <i class="fas fa-sort<?php echo $column == 'p_id' ? '-' . $up_or_down : ''; ?>"></i></a></th>
+            <th><a href="ListPatients?column=name&order=<?php echo $asc_or_desc; ?>">First Name <i class="fas fa-sort<?php echo $column == 'firstname' ? '-' . $up_or_down : ''; ?>"></i></a></th>
+            <th><a href="ListPatients?column=name&order=<?php echo $asc_or_desc; ?>">Last Name <i class="fas fa-sort<?php echo $column == 'lastname' ? '-' . $up_or_down : ''; ?>"></i></a></th>
+            <th><a href="ListPatients?column=name&order=<?php echo $asc_or_desc; ?>">Gender <i class="fas fa-sort<?php echo $column == 'gender' ? '-' . $up_or_down : ''; ?>"></i></a></th>
+            <th><a href="ListPatients?column=name&order=<?php echo $asc_or_desc; ?>">Contact <i class="fas fa-sort<?php echo $column == 'contact' ? '-' . $up_or_down : ''; ?>"></i></a></th>
+            <th><a href="ListPatients?column=name&order=<?php echo $asc_or_desc; ?>">Email <i class="fas fa-sort<?php echo $column == 'email' ? '-' . $up_or_down : ''; ?>"></i></a></th>
+            <th><a href="ListPatients?column=name&order=<?php echo $asc_or_desc; ?>">District <i class="fas fa-sort<?php echo $column == 'district' ? '-' . $up_or_down : ''; ?>"></i></a></th>
+            <th><a href="ListPatients?column=name&order=<?php echo $asc_or_desc; ?>">State <i class="fas fa-sort<?php echo $column == 'state' ? '-' . $up_or_down : ''; ?>"></i></a></th>
+            <th><a href="ListPatients?column=name&order=<?php echo $asc_or_desc; ?>">Country <i class="fas fa-sort<?php echo $column == 'country' ? '-' . $up_or_down : ''; ?>"></i></a></th>
+            <th>Actions</th>
+        </thead>
+        <tbody>
+            <?php while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+                ?>
+                <tr>
+                    <td><?= $row['p_id']?></td>
+                    <td><?= $row['firstname'] ?></td>
+                    <td><?= $row['lastname'] ?></td>
+                    <td><?= $row['gender'] ?></td>
+                    <td><?= $row['contact'] ?></td>
+                    <td><?= $row['email'] ?></td>
+                    <td><?= $row['district'] ?></td>
+                    <td><?php 
+                    if(is_numeric($row['state'])){
+                        $State = $state->SelectStateName($row['state']);
+                        echo $State;
+                    } else {
+                        echo $row['state'];
+                    }
+                    ?></td>
+                    <td><?php 
+                    if(is_numeric($row['country'])){
+                        $Country = $country->SelectCountryName($row['country']);
+                        echo $Country;
+                    } else {
+                        echo $row['country'];
+                    }
+                    ?></td>
+                    <td><button><a href="ViewPatient?p_id=<?= $row['p_id']?>">View</a></button>  <button><a href="patient?p_id=<?= $row['p_id']?>">Edit</a></button></td>
+                </tr>
+            <?php } ?>
+        </tbody>
+    </table>
+</div>
+<div class="pagination">
+    <?php 
+        $total_records = $patients->countRecords();
+        $total_pages = ceil($total_records/$record_per_page);
+        $pageLink = "";
+        for ($i=1; $i<=$total_pages; $i++) {   
+            if ($i == $page) {   
+                $pageLink .= "<a class='active' href='ListPatients?page=".$i."'>".$i."</a>";   
+            }               
+            else  {   
+                $pageLink .= "<a href='ListPatients?page=".$i."'>".$i."</a>";     
+            }   
+        };
+        echo $pageLink;       
+    ?>
+</div>
+<?php } ?>
+<?php } ?>
+<?php } ?>

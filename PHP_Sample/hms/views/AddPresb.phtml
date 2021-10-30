@@ -1,0 +1,80 @@
+<head>
+  <link rel="stylesheet" href="views/css/addPresbs.css">
+</head>
+<?php 
+  require_once("views/DoctorHome.phtml");
+?>
+<?php
+if (isset($_GET['p_id'])) {
+  $id = $_GET['p_id'];
+}
+?>
+<form name = "AddPresb" action = "AddPresbPost" method = "POST">
+    <fieldset>
+      <center><legend>Add Prescription</legend></center>
+        <p>
+          <input type = "hidden" id = "patientId" name = "patientId" value = "<?php echo $id ?>"> 
+        </p>
+        <table id = "presb" name = "presb">
+          <tr>
+            <td>
+              <label><b>Disease</b></label><br>
+              <select id = "disease" name = "disease[]">
+                <option value = "Select disease">Please Select</option>
+                <option value = "fever">Fever</option>
+                <option value = "cold">Cold</option>
+                <option value = "head-ache">HeadAche</option>
+                <option value = "others">Others</option>
+              </select>
+            </td>
+            <td>
+              <label for = "medicine"><b>Medicine</b></label>
+              <input type = "text" id = "medicine" name = "medicine[]" required>
+            </td>
+            <td>
+              <label for = "description"><b>Description</b></label>
+              <input type = "text" id = "description" name = "description[]" required>
+            </td>
+            <td>
+              <label for = "quantity"><b>Quantity</b></label>
+              <input type = "text" id = "quantity" name = "quantity[]" required>
+            </td>
+            <td>
+              <label for = "days"><b>No.of.Days</b></label>
+              <input type = "text" id = "days" name = "days[]" required>
+            </td>
+            <td>
+              <label for = "morning"><b>Morning</b></label><br>
+              <select id = "morning" name = "morning[]">
+                <option value = "Select">Select</option>
+                <option value = "yes">Yes</option>
+                <option value = "no">No</option>
+              </select>
+            </td>
+            <td>
+              <label for = "noon"><b>Noon</b></label><br>
+              <select id = "noon" name = "noon[]">
+                <option value = "Select">Select</option>
+                <option value = "yes">Yes</option>
+                <option value = "no">No</option>
+              </select>
+            </td>
+            <td>
+              <label for = "night"><b>Night</b></label><br>
+              <select id = "night" name = "night[]">
+                <option value = "Select">Select</option>
+                <option value = "yes">Yes</option>
+                <option value = "no">No</option>
+              </select>
+            </td>
+            <td>
+              <button name = "delete" id = "delete" onclick = "delRow(this,'presb');"><img src = "views/css/images/delete.jpg" alt = "image"></button>
+            </td>
+          </tr>
+        </table>
+        <button name = "addmore" id = "add" onclick = "addRow('presb');"><img src = "views/css/images/add.jpg" alt = "image"></button>
+        <p>
+          <input type = "submit" name = "submit" value = "Save"> 
+        </p>
+    </fieldset>
+</form> 

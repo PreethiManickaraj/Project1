@@ -1,0 +1,35 @@
+<head>
+    <link rel="stylesheet" href="views/css/login.css">
+    <style>
+        body{
+            background: linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)),url("views/css/images/login.jpg");
+            background-repeat:no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+        }
+    </style>
+</head>
+<div class="login">
+<form name="login" method="POST" action="LoginPost" onsubmit="return loginValidation('login')">
+    <p>
+        <label for="email">Email address</label><br><br>
+        <input type="text" id="email" name="email" placeholder="Enter email address" required>
+    </p>
+    <p>
+        <label for="password">Password</label><br><br>
+        <input type="password" id="password" name="password" placeholder="  Enter password" required>
+    </p>
+    <p>
+        <label for="role">Select role</label>
+        <select name="role" id="role">
+            <option value="admin">Admin</option>
+            <option value="staff">Staff</option>
+            <option value="patient">Patient</option>
+            <option value="doctor">Doctor</option>
+        </select>
+    </p>
+    <p>
+        <input type="submit" value="Login" name="Login" id="log" class="button">
+    </p>
+</form>
+</div>

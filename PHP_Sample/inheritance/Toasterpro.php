@@ -13,4 +13,4 @@ class Toasterpro  extends Toaster{
             echo "Toasting " . ($i+1). " ".$slice." with fast option". "<br>";
         }
     }
-}
+} 

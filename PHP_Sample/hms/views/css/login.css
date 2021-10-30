@@ -1,0 +1,50 @@
+h2{
+    color:black;
+}
+.login{
+    background: linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6),lavender);
+    margin-bottom: 50px;
+    max-width: 80%;
+    border-radius: 15px;
+}
+form input{
+    background-attachment: fixed;
+    padding: 12px 40px;
+    margin: 8px 90px;
+    display: block;
+    border: 1px solid black;
+    box-sizing: border-box;
+}
+form label{
+    margin-left: 150px;
+    color: white;
+}
+form select{
+    background-attachment: fixed;
+    padding: 12px 35px;
+    margin: 8px 140px;
+    display: block;
+    border: 1px solid black;
+    box-sizing: border-box;
+}
+input[type=submit] {
+    background: linear-gradient(grey,lightgrey,grey);
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 15px;
+    padding: 12px 100px;
+    border: 1px solid black;
+    box-sizing: border-box;
+    cursor:pointer;
+    margin-right: 40px;
+}
+.button:active {
+    background: linear-gradient(grey,skyblue,grey);
+    transform: translateY(4px);
+}
+.login {
+    width: 35%;
+    margin-left: 405px;
+    padding: 20px 10px;
+    border-radius: 5px;
+}

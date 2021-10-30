@@ -1,0 +1,210 @@
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="views/css/patient.css">
+</head>
+<?php 
+if ($_SESSION['role']==="admin") {
+  require_once("views/AdminHome.phtml");
+} 
+?>
+<?php 
+if ($_SESSION['role']==="staff") {
+  require_once("views/StaffHome.phtml");
+} 
+?>
+<?php 
+if ($_SESSION['role']==="doctor") {
+  require_once("views/DoctorHome.phtml");
+} 
+?>
+<?php 
+    if (isset($_GET['p_id'])) {
+        $id = $_GET['p_id'];
+        $update = true;
+        $patient = new PatientData();
+        $result = $patient->ViewPatient($id);
+    } else {
+        $id = 0;
+        $update = false;
+    }
+?>
+<div class="container">
+    <form name="patientLogin" id="patient" role="form" method="POST" action="PatientPost" onsubmit="return patientValidation('patientLogin')" enctype="multipart/form-data" autocomplete="on">
+        <fieldset>
+            <?php if($update===true): ?>
+                <center><legend>Update Patient</legend></center>
+            <?php else: ?>
+                <center><legend>Add Patient</legend></center>
+            <?php endif ?>
+            <p>
+                <?php if($update===true): ?>
+                    <input type="hidden" id="p_id" name="p_id" value="<?php echo $id; ?>">
+                <?php endif ?>
+            </p>
+            <div class="form-group row">
+                <label for="firstname" class="leftAlign">First Name</label>
+                <div class="col-sm-4">
+                    <input type="text" id="firstname" name="firstname" placeholder="Enter your first name"
+                    <?php if($update === true): ?>
+                        value="<?php echo $result['firstname']?>" 
+                    <?php else: ?>
+                        value="" 
+                    <?php endif ?> required>
+                </div>
+            </div>
+            </p>
+            <div class="form-group row">
+                <label for="lastname">Last Name</label>
+                <div class="col-sm-4">
+                    <input type="text" id="lastname" name="lastname" placeholder="Enter your last name"
+                    <?php if($update === true): ?>
+                        value="<?php echo $result['lastname']?>" 
+                    <?php else: ?>
+                        value="" 
+                    <?php endif ?> required>
+                </div> 
+            </div>
+            <div class="form-group row">
+                <label>Gender</label><br>
+                <div class="col-sm-4">
+                    <?php if($update === true): ?>
+                        <input type="radio" id="male" name="gender" <?php if($result['gender']=='male') { ?> checked='checked' <?php } ?> value="male"></input>
+                    <?php else: ?>
+                        <input type="radio" id="male" name="gender" value="Male">
+                    <?php endif ?>
+                    <label for="male" id="gender">Male</label>
+                    <?php if($update === true): ?>
+                        <input type="radio" id="female" name="gender" <?php if($result['gender']=='female') { ?> checked='checked' <?php } ?> value="female"></input>
+                    <?php else: ?>
+                        <input type="radio" id="female" name="gender" value="female">
+                    <?php endif ?>
+                    <label for="female" id="gender">Female</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="dob" class="leftAlign">Date Of Birth</label>
+                <div class="col-sm-4">
+                    <input type="date" id="dob" name="dob" placeholder="Enter your date of birth"
+                    <?php if($update === true): ?>
+                        value="<?php echo $result['dob']?>" 
+                    <?php else: ?>
+                        value="" 
+                    <?php endif ?> required>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="age" class="leftAlign">Age</label>
+                <div class="col-sm-4">
+                    <input type="number" id="age" name="age" placeholder="Enter your age" 
+                    <?php if($update === true): ?>
+                        value="<?php echo $result['age']?>" 
+                    <?php else: ?>
+                        value="" 
+                    <?php endif ?> required>
+                </div>
+            </div><br>
+            <div class="form-group row">
+                <label for="email" class="leftAlign">Email Address</label>
+                <div class="col-sm-4">
+                    <input type="email" id="email" name="email" placeholder="Enter email address"
+                    <?php if($update === true): ?>
+                        value="<?php echo $result['email']?>" 
+                    <?php else: ?>
+                        value="" 
+                    <?php endif ?> required>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="contact" class="leftAlign">Contact Number</label>
+                <div class="col-sm-4">
+                    <input type="tel" id="contact" name="contact" pattern="[0-9]{10}" placeholder="Enter mobile number" 
+                    <?php if($update === true): ?>
+                        value="<?php echo $result['contact']?>" 
+                    <?php else: ?>
+                        value="" 
+                    <?php endif ?> required>
+                </div>
+            </div>
+            <?php if($update === false) { ?>
+            <div class="form-group row">
+                <label for="password" class="leftAlign">Password</label>
+                <div class="col-sm-4">
+                    <input type="password" id="password" name="password" placeholder="Enter Password" required>
+                </div>
+            </div>
+            <?php } ?>
+            <div class="form-group row">
+                <label for= "address" class="leftAlign">Address</label><br>
+                <div class="col-sm-4">
+                    <?php if($update === true): ?>
+                        <textarea id="address" name="address" rows="4" cols="30"><?php echo $result['address']?></textarea>
+                    <?php else: ?>
+                        <textarea id="address" name="address" rows="4" cols="30" placeholder="Enter your address here"></textarea>
+                    <?php endif ?>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="country" class="leftAlign">Country</label>
+                <div class="col-sm-4">
+                    <select id="country" name="country" onchange="getStateByCountry(this.value, 'state');">
+                    <option value="Select Country">Select Country</option>
+                    <?php 
+                    $country = new CountryData();
+                    $result1 = $country->selectCountry();
+                    while ($row = $result1->fetch(PDO::FETCH_ASSOC)) {?>
+                    <?php if($update === true): ?>
+                        <option value=<?php echo $row['country_id']; ?> <?php if($result['country'] == $row['country_name']){ echo "selected";}?>> <?php echo $row['country_name'];?></option>
+                    <?php else: ?>
+                        <option value=<?php echo $row['country_id']; ?>><?php echo $row['country_name'];?></option>
+                    <?php endif ?>
+                        <?php } ?>
+                    </select> 
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="state" class="leftAlign">State</label>
+                <div class="col-sm-4">
+                    <select id="state" name="state">
+                        <?php
+                        if($update === true): ?>
+                            <option value=<?php echo $result['state']; ?> <?php if($result['state']){ echo "selected";}?>> <?php echo $result['state'];?></option>
+                        <?php else: ?>
+                            <option value="Select State" >Select State</option>
+                        <?php endif ?>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="district" class="leftAlign">District</label>
+                <div class="col-sm-4">
+                    <input type="text" id="district" name="district" placeholder="Enter district"
+                    <?php if($update === true): ?>
+                        value = "<?php echo $result['district']?>"
+                    <?php else: ?>
+                        <?php echo ""?>
+                    <?php endif ?> required>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="pincode" class="leftAlign">Postal code</label>
+                <div class="col-sm-4">
+                    <input type="text" id="pincode" name="pincode" placeholder="Enter pincode"
+                    <?php if($update === true): ?>
+                        value = "<?php echo $result['pincode']?>"
+                    <?php else: ?>
+                        <?php echo ""; ?>
+                    <?php endif ?> required>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="offset-sm-2 col-sm-10">
+                    <?php if($update===true): ?>
+                        <input type="submit" value="Update" name="submit">
+                    <?php else: ?>
+                        <input type="submit" id="Save" value="Save" name="submit">
+                    <?php endif ?>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>

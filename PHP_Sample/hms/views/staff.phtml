@@ -1,0 +1,77 @@
+<head>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="views/css/staffs.css">
+</head>
+<?php 
+if ($_SESSION['role'] === "admin") {
+  require_once("views/AdminHome.phtml");
+} 
+if ($_SESSION['role'] === "staff") {
+  require_once("views/StaffHome.phtml");
+}
+
+if (isset($_GET['staff_id'])) {
+  $id = $_GET['staff_id'];
+  $update = true;
+  $staff = new StaffData();
+  $result = $staff->viewStaff($id);
+} else {
+  $id = 0;
+  $update = false;
+}
+?>
+<div class="container">
+  <form name="staffLogin" method="POST" action="StaffPost" onsubmit="return validation('staffLogin')" autocomplete="on">
+    <fieldset>
+      <?php if($update === true): ?>
+        <center><legend>Update Staff</legend></center>
+      <?php else: ?>
+        <center><legend>Add Staff</legend></center>
+      <?php endif ?>
+      <p>
+        <?php if($update===true): ?>
+          <input type="hidden" id="staff_id" name="staff_id" value="<?php echo $id; ?>">
+        <?php endif ?>
+      </p>
+      <div class="form-group row">
+        <label for="StaffName">Name</label>
+        <div class="col-sm-4">
+          <input type="text" id="StaffName" name="StaffName" placeholder="Enter your name"
+          <?php if($update === true): ?>
+            value="<?php echo $result['name']?>" 
+          <?php else: ?>
+            value="" 
+          <?php endif ?> required>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="email">Email Address</label>
+        <div class="col-sm-4">
+          <input type="email" id="email" name="email" placeholder="Enter email address" 
+          <?php if($update === true): ?>
+            value="<?php echo $result['email']?>" 
+          <?php else: ?>
+            value="" 
+          <?php endif ?> required>
+        </div>
+      </div>
+      <?php if($update === false) { ?>
+        <div class="form-group row"> 
+          <label for="password">Password</label>
+          <div class="col-sm-4">
+            <input type="password" id="password" name="password" placeholder="Enter password" required>
+          </div>
+        </div>
+      <?php } ?>
+      <div class="form-group row">
+        <div class="offset-sm-2 col-sm-10">
+          <?php if($update===true): ?>
+            <input type="submit" value="Update" name="submit">
+          <?php else: ?>
+            <input type="submit" id="Save" value="Save" name="submit">
+          <?php endif ?>
+        </div>
+      </div>
+    </fieldset>
+  </form>
+</div>

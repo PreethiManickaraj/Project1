@@ -9,7 +9,7 @@ use PHP_Sample\Example2\Transaction as Example2Transaction;
 use PHP_Sample\Example1\Profile;
 
 $Example1Transaction = new Example1\Transaction();
-$Example2Transaction = new Example2Transaction();
+$Example2Transaction = new Example2Transaction(20);
 $profile = new Profile();
 
 //var_dump(new PHP_Sample\Example1\Transaction());

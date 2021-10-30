@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<base href="/localhost" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0">
+	<meta charset="UTF-8" />
+	<title><?= $title ?></title>
+	<link rel="stylesheet" href="views/css/style1.css">
+	<link rel="stylesheet" href="views/css/nav.css">
+	<script type="text/javascript" src="views/js/loginValidation.js"></script>
+	<script type="text/javascript" src="views/js/doctorValidation.js"></script>
+	<script type="text/javascript" src="views/js/patientValidation.js"></script>
+	<script type="text/javascript" src="views/js/common.js"></script>
+	<script type="text/javascript" src="views/js/PatientExport.js"></script>
+	<script type="text/javascript" src="views/js/Prescription.js"></script>
+	<script type="text/javascript" src="views/js/DoctorReport.js"></script>
+	<script type="text/javascript" src="views/js/StaffExport.js"></script>
+	<meta name="description" content="<?= $description ?>" />
+</head>
+<body style="overflow-x:auto;">
+<header>
+	<h1><center>Hospital Management System</center></h1>
+</header>
+<article>
+	<div class="message">
+		<span style="color:red" class="error"><?= $error ?></span>
+		<span style="color:green" class="success"><?= $success ?></span>
+		<span style="color:orange" class="warning"><?= $warning ?></span>
+	</div>
+	<?php $this->controller->renderView();  ?>
+</article>
+<footer class="foo">
+	<div>Contact: hms@gmail.com.Copyright 1999 -
+		<?php
+		$year = date("Y");
+		echo $year?>
+		.All Rights Reserved.</div>
+</footer>
+</body>
+</html>

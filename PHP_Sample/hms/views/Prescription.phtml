@@ -1,0 +1,55 @@
+<head>
+    <link rel="stylesheet" href="views/css/prescription.css">
+</head>
+<?php 
+if ($_SESSION['role'] === 'admin') {
+    require_once("views/AdminHome.phtml");
+} 
+if ($_SESSION['role'] === 'staff') {
+    require_once("views/StaffHome.phtml");
+} 
+if ($_SESSION['role'] === 'doctor') {
+    require_once("views/DoctorHome.phtml");
+} 
+if ($_SESSION['role'] === "patient") {
+    $cookie=json_decode($_COOKIE['userdata'],true);
+    $presb = new Prescription();
+    $presbList = $presb->listPresb($cookie['id']);
+?>
+<nav>
+  <ul>
+    <li><a href="Prescription">Prescription Details</a></li>
+    <li class="profile"><a href="profile">My Profile</a></li>
+    <li class="logout"><a href="logout">Logout</a></li>
+  </ul>
+</nav>
+<h3 style="color:white;font-size:20px;"><center>Prescription Details</center></h3>
+<div style="overflow-x:auto;">
+    <table>
+        <thead>
+            <th>ID</th>
+            <th>Doctor</th>
+            <th>Disease</th>
+            <th>Medicine</th>
+            <th>Description</th>
+            <th>Morning</th>
+            <th>Noon</th>
+            <th>Night</th>
+        </thead>
+        <tbody>
+          <?php while ($row = $presbList->fetch(PDO::FETCH_ASSOC)) { ?>
+          <tr>
+              <td><?= $row['presb_id']?></td>
+              <td><?= $row['firstname'] ?></td>
+              <td><?= $row['disease'] ?></td>
+              <td><?= $row['medicine'] ?></td>
+              <td><?= $row['description'] ?></td>
+              <td><?= $row['morning'] ?></td>
+              <td><?= $row['noon'] ?></td>
+              <td><?= $row['night'] ?></td>
+          </tr>
+          <?php } ?>
+        </tbody>
+    </table>
+</div>
+<?php } ?>
